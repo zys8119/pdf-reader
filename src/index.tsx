@@ -13,6 +13,8 @@ export default defineComponent(({
         }
         return pages
     })
+    // 大纲
+    const outline = ref<any[]>([])
     const pageInfo = computed<Promise<PDFPageProxy>>(() => {
         return pages.value[currentPage.value]
     })
@@ -39,6 +41,8 @@ export default defineComponent(({
     onMounted(async () => {
         pdf.value = await getDocument(src).promise
         numPages.value = pdf.value.numPages
+        outline.value = await pdf.value.getOutline()
+        console.log(outline.value)
         await render()
     })
     return () => (<>
