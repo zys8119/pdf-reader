@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  pdfjs-dist:
-    specifier: ^5.0.375
-    version: 5.0.375
   vue:
     specifier: ^3.5.13
     version: 3.5.13(typescript@5.8.2)
@@ -34,6 +31,12 @@ devDependencies:
   '@unocss/cli':
     specifier: 66.1.0-beta.5
     version: 66.1.0-beta.5
+  '@vueuse/core':
+    specifier: ^13.0.0
+    version: 13.0.0(vue@3.5.13)
+  pdfjs-dist:
+    specifier: ^5.0.375
+    version: 5.0.375
   typescript:
     specifier: ^5.8.2
     version: 5.8.2
@@ -42,7 +45,7 @@ devDependencies:
     version: 66.1.0-beta.5(postcss@8.5.3)(vite@6.2.2)(vue@3.5.13)
   unplugin-auto-import:
     specifier: ^19.1.1
-    version: 19.1.1
+    version: 19.1.1(@vueuse/core@13.0.0)
 
 packages:
 
@@ -797,7 +800,7 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-darwin-arm64@0.1.68:
@@ -806,7 +809,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-darwin-x64@0.1.68:
@@ -815,7 +818,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-linux-arm-gnueabihf@0.1.68:
@@ -824,7 +827,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-linux-arm64-gnu@0.1.68:
@@ -834,7 +837,7 @@ packages:
     os: [linux]
     libc: [glibc]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-linux-arm64-musl@0.1.68:
@@ -844,7 +847,7 @@ packages:
     os: [linux]
     libc: [musl]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-linux-riscv64-gnu@0.1.68:
@@ -854,7 +857,7 @@ packages:
     os: [linux]
     libc: [glibc]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-linux-x64-gnu@0.1.68:
@@ -864,7 +867,7 @@ packages:
     os: [linux]
     libc: [glibc]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-linux-x64-musl@0.1.68:
@@ -874,7 +877,7 @@ packages:
     os: [linux]
     libc: [musl]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas-win32-x64-msvc@0.1.68:
@@ -883,7 +886,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /@napi-rs/canvas@0.1.68:
@@ -901,7 +904,7 @@ packages:
       '@napi-rs/canvas-linux-x64-gnu': 0.1.68
       '@napi-rs/canvas-linux-x64-musl': 0.1.68
       '@napi-rs/canvas-win32-x64-msvc': 0.1.68
-    dev: false
+    dev: true
     optional: true
 
   /@polka/url@1.0.0-next.28:
@@ -1351,6 +1354,10 @@ packages:
       undici-types: 6.20.0
     dev: true
 
+  /@types/web-bluetooth@0.0.21:
+    resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
+    dev: true
+
   /@unocss/astro@66.1.0-beta.5(vite@6.2.2)(vue@3.5.13):
     resolution: {integrity: sha512-0MI2Dkh3OGSsuAA5Ofm/sP9XfQu18HORi0cdkNT9SDDWBu/qcAAtTaBCXlyiRbdo8BcLTpRSyvHP+pMa7JcHOw==}
     peerDependencies:
@@ -1668,6 +1675,29 @@ packages:
 
   /@vue/shared@3.5.13:
     resolution: {integrity: sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==}
+
+  /@vueuse/core@13.0.0(vue@3.5.13):
+    resolution: {integrity: sha512-rkgb4a8/0b234lMGCT29WkCjPfsX0oxrIRR7FDndRoW3FsaC9NBzefXg/9TLhAgwM11f49XnutshM4LzJBrQ5g==}
+    peerDependencies:
+      vue: ^3.5.0
+    dependencies:
+      '@types/web-bluetooth': 0.0.21
+      '@vueuse/metadata': 13.0.0
+      '@vueuse/shared': 13.0.0(vue@3.5.13)
+      vue: 3.5.13(typescript@5.8.2)
+    dev: true
+
+  /@vueuse/metadata@13.0.0:
+    resolution: {integrity: sha512-TRNksqmvtvqsuHf7bbgH9OSXEV2b6+M3BSN4LR5oxWKykOFT9gV78+C2/0++Pq9KCp9KQ1OQDPvGlWNQpOb2Mw==}
+    dev: true
+
+  /@vueuse/shared@13.0.0(vue@3.5.13):
+    resolution: {integrity: sha512-9MiHhAPw+sqCF/RLo8V6HsjRqEdNEWVpDLm2WBRW2G/kSQjb8X901sozXpSCaeLG0f7TEfMrT4XNaA5m1ez7Dg==}
+    peerDependencies:
+      vue: ^3.5.0
+    dependencies:
+      vue: 3.5.13(typescript@5.8.2)
+    dev: true
 
   /@webassemblyjs/ast@1.14.1:
     resolution: {integrity: sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ==}
@@ -2360,7 +2390,7 @@ packages:
     engines: {node: '>=20'}
     optionalDependencies:
       '@napi-rs/canvas': 0.1.68
-    dev: false
+    dev: true
 
   /perfect-debounce@1.0.0:
     resolution: {integrity: sha512-xCy9V055GLEqoFaHoC1SoLIaLmWctgCUaBaWxDZ7/Zx4CTyX7cJQLJOok/orfjZAh9kEYpjJa4d0KcJmCbctZA==}
@@ -2716,7 +2746,7 @@ packages:
       - vue
     dev: true
 
-  /unplugin-auto-import@19.1.1:
+  /unplugin-auto-import@19.1.1(@vueuse/core@13.0.0):
     resolution: {integrity: sha512-sCGZZrSR1Bc8RfN8Q0RUDxXtC20rdAt7UB4lDyq8MNtKVHiXXh+5af6Nz4JRp9Q+7HjnbgQfQox0TkEymjdUAQ==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -2728,6 +2758,7 @@ packages:
       '@vueuse/core':
         optional: true
     dependencies:
+      '@vueuse/core': 13.0.0(vue@3.5.13)
       local-pkg: 1.1.1
       magic-string: 0.30.17
       picomatch: 4.0.2

@@ -5,8 +5,10 @@
 </template>
 <script setup lang="ts">
 import "pdf-reader/style.css"
-import pdfReader from "pdf-reader"
+import pdfReader, { GlobalWorkerOptions } from "pdf-reader"
+import workerUrl from "pdf-reader/pdf.worker.mjs?url"
 import pdf from "./test1.pdf?url"
+GlobalWorkerOptions.workerSrc = workerUrl
 </script>
 <style scoped lang="less">
 .App {}

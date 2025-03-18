@@ -18,7 +18,7 @@ export default defineConfig({
     rspack: {
       plugins: [
         AutoImport({
-          imports: ["vue"],
+          imports: ["vue", "@vueuse/core"],
           dts: "src/auto-imports.d.ts",
         }),
       ],
