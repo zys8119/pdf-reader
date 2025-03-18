@@ -1,7 +1,14 @@
 import { defineConfig } from "unocss";
+import { readFileSync } from "fs";
 
 export default defineConfig({
   // ...UnoCSS options
+  preflights: [
+    {
+      getCSS: () =>
+        readFileSync("./node_modules/swiper/swiper.min.css", "utf-8"),
+    },
+  ],
   shortcuts: {
     "flex-center": "flex justify-center items-center",
     "flex-center-start": "flex justify-start items-center",

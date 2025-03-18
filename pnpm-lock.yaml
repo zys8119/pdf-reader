@@ -37,6 +37,9 @@ devDependencies:
   pdfjs-dist:
     specifier: ^5.0.375
     version: 5.0.375
+  swiper:
+    specifier: ^11.2.5
+    version: 11.2.5
   typescript:
     specifier: ^5.8.2
     version: 5.8.2
@@ -2587,6 +2590,11 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       has-flag: 4.0.0
+    dev: true
+
+  /swiper@11.2.5:
+    resolution: {integrity: sha512-nG0kbIyBfeE2BPFt9nPUX03qUBF75o6+enzjIT/DfCmbh8ORlwhc4eZz1+4H/yseAgb3H+OoEYzmb64i0tYNnQ==}
+    engines: {node: '>= 4.7.0'}
     dev: true
 
   /tapable@2.2.1:

@@ -27,6 +27,11 @@ dependencies:
     specifier: ^3.5.13
     version: 3.5.13
 
+devDependencies:
+  swiper:
+    specifier: ^11.2.5
+    version: 11.2.5
+
 packages:
 
   /@ampproject/remapping@2.3.0:
@@ -1344,6 +1349,11 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /swiper@11.2.5:
+    resolution: {integrity: sha512-nG0kbIyBfeE2BPFt9nPUX03qUBF75o6+enzjIT/DfCmbh8ORlwhc4eZz1+4H/yseAgb3H+OoEYzmb64i0tYNnQ==}
+    engines: {node: '>= 4.7.0'}
+    dev: true
 
   /tinyexec@0.3.2:
     resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
