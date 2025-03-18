@@ -38,6 +38,10 @@ export default defineConfig({
         from: "./uno.css",
         context: "./src",
       },
+      {
+        from: "./node_modules/pdfjs-dist/build/pdf.worker.mjs",
+        context: "./",
+      },
     ],
   },
 });

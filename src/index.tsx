@@ -1,13 +1,17 @@
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist"
+// import workerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
+GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
 export default defineComponent<{
-    a?: number
-}>(() => {
-    const aa = ref(1)
-    const bb = () => {
-        aa.value = aa.value + 1
-    }
+    src: Parameters<typeof getDocument>[0]
+}>(({
+    src
+}) => {
+    onMounted(async () => {
+        const pdf = await getDocument(src).promise
+        console.log(pdf)
+    })
     return () => (<>
-        <div class={'bg-#f00'} onClick={bb}>
-            {aa.value}
+        <div class={'bg-#f00'} >
         </div>
     </>)
 }, {
