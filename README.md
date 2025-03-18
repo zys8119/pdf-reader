@@ -1,23 +1,3 @@
-# Rslib project
+# pdf-reader
 
-## Setup
-
-Install the dependencies:
-
-```bash
-pnpm install
-```
-
-## Get started
-
-Build the library:
-
-```bash
-pnpm build
-```
-
-Build the library in watch mode:
-
-```bash
-pnpm dev
-```
+vue3 编写的 pdf 阅读器

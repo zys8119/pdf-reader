@@ -1,5 +1,5 @@
 {
-  "name": "rslib-project",
+  "name": "pdf-reader",
   "version": "0.0.0",
   "type": "module",
   "exports": {
@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "rslib build",
-    "dev": "rslib build --watch"
+    "dev": "rslib build --watch & cd test && vite"
   },
   "devDependencies": {
     "@rslib/core": "^0.5.4",
