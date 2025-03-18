@@ -1,8 +1,12 @@
 import { getDocument, GlobalWorkerOptions, PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist"
 import Swiper from "swiper"
-export default defineComponent(({
-    src
-}) => {
+import { register } from 'swiper/element/bundle';
+import { createApp } from 'vue';
+export default defineComponent<{
+    src: string,
+    vertical?: boolean
+}>((props) => {
+    register()
     const pdf = shallowRef<PDFDocumentProxy>() as Ref<PDFDocumentProxy>
     const numPages = ref(0)
     const currentPage = ref(0)
@@ -36,10 +40,29 @@ export default defineComponent(({
         }
     }
     onMounted(async () => {
-        pdf.value = await getDocument(src).promise
+        pdf.value = await getDocument(props.src).promise
         numPages.value = pdf.value.numPages
         outline.value = await pdf.value.getOutline()
-        new Swiper('.swiper')
+        const swiperEl = document.querySelector('.swiper');
+        new Swiper(swiperEl as any, {
+            direction: props.vertical ? "vertical" : "horizontal",
+            virtual: {
+                enabled: true,
+                slides: new Array(numPages.value).fill(0),
+                renderSlide(s, k) {
+                    const div = document.createElement('div')
+                    div.className = 'swiper-slide'
+                    div.innerHTML = 'asdas'
+                    createApp(() => h(renderCanvas(s, k))).mount(div)
+                    return div
+                },
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                type: "fraction",
+                clickable: true,
+            },
+        })
     })
     const renderCanvas = (_: any, k: number) => {
         return <div class="swiper-slide flex-center" style={{
@@ -53,15 +76,18 @@ export default defineComponent(({
     return () => (<>
         <div ref={container} class='abs-content bg-#e8e8e8'>
             <div class="swiper abs-content">
-                <div class="swiper-wrapper">
-                    {new Array(numPages.value).fill(0).map(renderCanvas)}
-                </div>
+                <div class="swiper-wrapper"></div>
+                <div class="swiper-pagination"></div>
             </div>
         </div >
     </>)
 }, {
     props: {
-        src: String
+        src: String,
+        vertical: {
+            type: Boolean,
+            default: false
+        }
     },
     inheritAttrs: false
 })

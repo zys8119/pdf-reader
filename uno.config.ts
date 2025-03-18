@@ -6,7 +6,7 @@ export default defineConfig({
   preflights: [
     {
       getCSS: () =>
-        readFileSync("./node_modules/swiper/swiper.min.css", "utf-8"),
+        readFileSync("./node_modules/swiper/swiper-bundle.min.css", "utf-8"),
     },
   ],
   shortcuts: {
