@@ -4,27 +4,34 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/declara.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./style.css": {
+      "import": "./dist/uno.css"
     }
   },
   "module": "./dist/index.js",
-  "types": "./dist/declara.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "rslib build",
-    "dev": "rslib build --watch & cd test && vite"
+    "dev": "rslib build --watch & cd test && vite & unocss src/**/*.tsx -w -o src/uno.css"
   },
   "devDependencies": {
+    "@rsbuild/plugin-babel": "^1.0.4",
     "@rsbuild/plugin-less": "^1.1.1",
+    "@rsbuild/plugin-vue": "^1.0.7",
+    "@rsbuild/plugin-vue-jsx": "^1.1.0",
     "@rslib/core": "^0.5.4",
     "@types/node": "^22.8.1",
-    "typescript": "^5.8.2"
+    "@unocss/cli": "66.1.0-beta.5",
+    "typescript": "^5.8.2",
+    "unplugin-auto-import": "^19.1.1"
   },
   "dependencies": {
-    "@rsbuild/plugin-vue": "^1.0.7",
     "unocss": "66.1.0-beta.5",
     "vue": "^3.5.13"
   }
