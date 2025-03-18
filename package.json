@@ -21,5 +21,8 @@
     "@rslib/core": "^0.5.4",
     "@types/node": "^22.8.1",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "unocss": "66.1.0-beta.5"
   }
 }
