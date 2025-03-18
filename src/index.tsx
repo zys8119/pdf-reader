@@ -45,6 +45,7 @@ export default defineComponent<{
         outline.value = await pdf.value.getOutline()
         const swiperEl = document.querySelector('.swiper');
         new Swiper(swiperEl as any, {
+            zoom: true,
             direction: props.vertical ? "vertical" : "horizontal",
             virtual: {
                 enabled: true,
@@ -65,12 +66,12 @@ export default defineComponent<{
         })
     })
     const renderCanvas = (_: any, k: number) => {
-        return <div class="swiper-slide flex-center" style={{
-            display: 'flex !important',
-        }}>
-            <canvas ref={el => {
-                render(el as any, k)
-            }} />
+        return <div class="swiper-slide flex-center">
+            <div class="swiper-zoom-container  flex-center">
+                <canvas ref={el => {
+                    render(el as any, k)
+                }} />
+            </div>
         </div>
     }
     return () => (<>

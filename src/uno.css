@@ -33,6 +33,5 @@
 .container{max-width:1536px;}
 }
 /* layer: default */
-.flex{display:flex;}
 .bg-\#e8e8e8{--un-bg-opacity:1;background-color:rgb(232 232 232 / var(--un-bg-opacity)) /* #e8e8e8 */;}
 .outline{outline-style:solid;}
