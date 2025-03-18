@@ -1,1 +1,4 @@
-export const squared = (n: number): number => n * n;
+import { defineAsyncComponent } from "vue";
+import Index from "./index.vue";
+import "./index.d";
+export default Index;
