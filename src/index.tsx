@@ -24,7 +24,7 @@ export default defineComponent<{
         })
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
         const page = await pdf.value.getPage(pageIndex + 1)
-        const viewport = page.getViewport({ scale: 1 })
+        const viewport = page.getViewport({ scale: 5 })
         canvas.height = viewport.height
         canvas.width = viewport.width
         watch(scale, () => {
@@ -45,7 +45,10 @@ export default defineComponent<{
         outline.value = await pdf.value.getOutline()
         const swiperEl = document.querySelector('.swiper');
         new Swiper(swiperEl as any, {
-            zoom: true,
+            spaceBetween: 30,
+            zoom: {
+                maxRatio: 5,
+            },
             direction: props.vertical ? "vertical" : "horizontal",
             virtual: {
                 enabled: true,
