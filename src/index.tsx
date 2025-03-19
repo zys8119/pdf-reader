@@ -44,7 +44,7 @@ export default defineComponent<{
         numPages.value = pdf.value.numPages
         outline.value = await pdf.value.getOutline()
         const swiperEl = document.querySelector('.swiper');
-        new Swiper(swiperEl as any, {
+        const swiper = new Swiper(swiperEl as any, {
             spaceBetween: 30,
             zoom: {
                 maxRatio: 5,
@@ -67,6 +67,7 @@ export default defineComponent<{
                 clickable: true,
             },
         })
+        swiper.slidePrev();
     })
     const renderCanvas = (_: any, k: number) => {
         return <div class="swiper-slide flex-center">
@@ -77,22 +78,49 @@ export default defineComponent<{
             </div>
         </div>
     }
-    return () => (<>
-        <div ref={container} class='abs-content bg-#e8e8e8'>
-            <div class="swiper abs-content">
-                <div class="swiper-wrapper"></div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-slide menu abs" >Menu slide</div>
-                <div class="swiper-slide content">
-                    <div class="menu-button">
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
+    const outlineClick = (item: any) => {
+        item.show = !item.show
+    }
+    const renderOutlineList = (outline: any[]) => {
+        return (<>
+            {outline.map((item) => {
+                return (<div class={'p-15px'}>
+                    <div onClick={() => outlineClick(item)} class='flex-center-start'>
+                        {item.items && item.items.length > 0 ? (<div class={'text-#f00'}><svg t="1742350901728" fill="currentColor" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2642" width="200" height="200"><path d="M768 682.666667c-12.8 0-21.333333-4.266667-29.866667-12.8L512 443.733333l-226.133333 226.133334c-17.066667 17.066667-42.666667 17.066667-59.733334 0s-17.066667-42.666667 0-59.733334l256-256c17.066667-17.066667 42.666667-17.066667 59.733334 0l256 256c17.066667 17.066667 17.066667 42.666667 0 59.733334-8.533333 8.533333-17.066667 12.8-29.866667 12.8z"></path></svg></div>) : null}
+                        <div class={'flex-1'}>{item.title}</div>
                     </div>
-                    Content slide
+                    {item.show ? <div >
+                        {item.items && item.items.length > 0 && renderOutlineList(item.items)}
+                    </div> : null}
+                </div>)
+            })}
+        </>)
+    }
+    const renderOutline = (outline: any[]) => {
+        return (<>
+            <div class="flex of-auto select-none cursor-pointer">
+                <div class={'text-12px'}>
+                    <div>缩略图</div>
+                    <div>大纲</div>
+                </div>
+                <div class={'of-auto'}>
+                    {renderOutlineList(outline)}
                 </div>
             </div>
-        </div >
+        </>)
+    }
+    return () => (<>
+        <div class={'abs-content flex'}>
+            {renderOutline(outline.value)}
+            <div class={'flex-1 abs-r'}>
+                <div ref={container} class='abs-content bg-#e8e8e8'>
+                    <div class="swiper abs-content">
+                        <div class="swiper-wrapper"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div >
+            </div>
+        </div>
     </>)
 }, {
     props: {
