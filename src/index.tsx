@@ -1,3 +1,5 @@
+import 'core-js/es/index';
+console.log(URL.parse)
 import { getDocument, GlobalWorkerOptions, PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist"
 import Swiper from "swiper"
 import { register } from 'swiper/element/bundle';

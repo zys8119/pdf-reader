@@ -8,6 +8,9 @@ dependencies:
   '@babel/preset-env':
     specifier: ^7.26.9
     version: 7.26.9(@babel/core@7.26.10)
+  core-js:
+    specifier: ^3.41.0
+    version: 3.41.0
   vue:
     specifier: ^3.5.13
     version: 3.5.13(typescript@5.8.2)
@@ -3007,7 +3010,6 @@ packages:
   /core-js@3.41.0:
     resolution: {integrity: sha512-SJ4/EHwS36QMJd6h/Rg+GyR4A5xE0FSI3eZ+iBVpfqf1x0eTSg1smWLHrA+2jQThZSh97fmSgFSU8B61nxosxA==}
     requiresBuild: true
-    dev: true
 
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}

@@ -11,7 +11,7 @@ export default defineConfig({
   lib: [
     {
       format: "esm",
-      syntax: "es5",
+      syntax: "es2015",
       dts: true,
       bundle: true,
     },
@@ -33,11 +33,15 @@ export default defineConfig({
       babelLoaderOptions: {
         plugins: [
           [
-            "babel-plugin-polyfill-corejs3",
+            "polyfill-corejs3",
             {
-              method: "usage-pure",
-              targets: { ie: "10" },
-              version: "3.29",
+              method: "usage-global",
+              targets: {
+                edge: "17",
+                firefox: "60",
+                chrome: "67",
+                safari: "11.1",
+              },
             },
           ],
         ],
@@ -57,5 +61,6 @@ export default defineConfig({
         context: "./",
       },
     ],
+    polyfill: "usage",
   },
 });

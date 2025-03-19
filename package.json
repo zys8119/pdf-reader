@@ -41,10 +41,11 @@
     "swiper": "^11.2.5",
     "typescript": "^5.8.2",
     "unocss": "66.1.0-beta.5",
-    "unplugin-auto-import": "^19.1.1"
+    "unplugin-auto-import": "^19.1.1",
+    "@babel/preset-env": "^7.26.9"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.26.9",
+    "core-js": "^3.41.0",
     "vue": "^3.5.13"
   }
 }
