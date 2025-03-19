@@ -5,6 +5,9 @@ import { pluginVue } from "@rsbuild/plugin-vue";
 import { pluginVueJsx } from "@rsbuild/plugin-vue-jsx";
 import AutoImport from "unplugin-auto-import/rspack";
 export default defineConfig({
+  source: {
+    include: [/node_modules[\\/]pdfjs-dist[\\/]/],
+  },
   lib: [
     {
       format: "esm",
