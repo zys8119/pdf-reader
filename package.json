@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "build": "rslib build",
-    "dev": "rslib build --watch & cd test && vite --host & unocss src/**/*.tsx -w -o src/uno.css"
+    "dev": "rslib build --watch & cd test && vite --host --port 5174 & cd test && vite build -w & unocss src/**/*.tsx -w -o src/uno.css"
   },
   "devDependencies": {
     "@rsbuild/plugin-babel": "^1.0.4",
