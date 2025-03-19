@@ -9,4 +9,7 @@ export default defineConfig({
       hmrTopLevelAwait: false,
     }),
   ],
+  build: {
+    target: "es2015",
+  },
 });
