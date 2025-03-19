@@ -82,6 +82,15 @@ export default defineComponent<{
             <div class="swiper abs-content">
                 <div class="swiper-wrapper"></div>
                 <div class="swiper-pagination"></div>
+                <div class="swiper-slide menu abs" >Menu slide</div>
+                <div class="swiper-slide content">
+                    <div class="menu-button">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    Content slide
+                </div>
             </div>
         </div >
     </>)

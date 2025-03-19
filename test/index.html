@@ -4,6 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <!-- PageSpy SDK -->
+    <script
+      crossorigin="anonymous"
+      src="http://192.168.110.242:6752/page-spy/index.min.js"
+    ></script>
+
+    <!-- 插件（非必须，但建议使用） -->
+    <script
+      crossorigin="anonymous"
+      src="http://192.168.110.242:6752/plugin/data-harbor/index.min.js"
+    ></script>
+    <script
+      crossorigin="anonymous"
+      src="http://192.168.110.242:6752/plugin/rrweb/index.min.js"
+    ></script>
+    <script>
+      window.$harbor = new DataHarborPlugin();
+      window.$rrweb = new RRWebPlugin();
+
+      [window.$harbor, window.$rrweb].forEach((p) => {
+        PageSpy.registerPlugin(p);
+      });
+
+      window.$pageSpy = new PageSpy({
+        project: "pdf-reader",
+      });
+    </script>
   </head>
   <body>
     <div id="app"></div>

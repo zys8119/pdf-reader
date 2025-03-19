@@ -3,3 +3,4 @@ dist
 .vscode
 .ds_store
 test/node_modules
+test/dist

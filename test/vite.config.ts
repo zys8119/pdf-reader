@@ -6,6 +6,7 @@ export default defineConfig({
     vue(),
     UnoCSS({
       configFile: "../uno.config.ts",
+      hmrTopLevelAwait: false,
     }),
   ],
 });
