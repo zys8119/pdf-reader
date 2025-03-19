@@ -4,7 +4,6 @@ import { pluginBabel } from "@rsbuild/plugin-babel";
 import { pluginVue } from "@rsbuild/plugin-vue";
 import { pluginVueJsx } from "@rsbuild/plugin-vue-jsx";
 import AutoImport from "unplugin-auto-import/rspack";
-import babel from "@babel/core";
 export default defineConfig({
   source: {
     include: [/node_modules[\\/]pdfjs-dist[\\/]/],
@@ -57,13 +56,13 @@ export default defineConfig({
         from: "./uno.css",
         context: "./src",
       },
-      {
-        from: "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
-        context: "./",
-        transform: (content) => {
-          return babel.transformSync(content.toString(), {});
-        },
-      },
+      // {
+      //   from: "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
+      //   context: "./",
+      //   transform: (content) => {
+      //     return babel.transformSync(content.toString(), {});
+      //   },
+      // },
     ],
     polyfill: "usage",
   },
