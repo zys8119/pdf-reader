@@ -169,7 +169,7 @@ export default defineComponent<{
             swiper.value?.slidePrev()
         }
     }
-    const showOutline = ref(true)
+    const showOutline = ref(false)
     const outlineTabs = shallowRef([
         { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
         { title: '图片', icon: 'image', render: () => renderThumbnailList() },
