@@ -106,7 +106,7 @@ export default defineComponent<{
                     }} class='flex-center-start hover:bg-#f0f0f0 cursor-pointer p-10px  p-l-$levelGap'>
                         {item.items && item.items.length > 0 ? (
                             <div onClick={() => outlineClick(item)} class={`w-30px h-30px flex-center b-rd-100% hover:bg-#fff ${item.show ? 'transform rotate-180' : 'transform rotate-90'}`}>
-                                {svgIcon()}
+                                {svgIcon('arrow')}
                             </div>
                         ) : null}
                         <div class={'flex-1 of-hidden'}>
