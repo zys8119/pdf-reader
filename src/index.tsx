@@ -36,6 +36,11 @@ export default defineComponent<{
     const outline = ref<any[]>([])
     const container = ref<HTMLDivElement>() as Ref<HTMLDivElement>
 
+    const showOutline = ref(false)
+    const outlineTabs = shallowRef([
+        { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
+        { title: '图片', icon: 'image', render: () => renderThumbnailList() },
+    ])
     const render = async (canvas: HTMLCanvasElement, pageIndex: number) => {
         const { width: boxw, height: boxh } = useElementSize(container)
         const { width: cw, height: ch } = useElementSize(canvas)
@@ -64,11 +69,37 @@ export default defineComponent<{
             src
         }
     }
+    /**
+     * 判断是否是空闲时间
+     * @param callback  执行的任务
+     * @param isStop    是否停止监听空闲时间
+     */
+    const idleTaskExecute = async (callback: () => Promise<void>, isStop?: () => boolean) => {
+        // 定义一个空闲回调函数
+        async function idleTask(deadline: any) {
+            // 如果还有剩余时间，继续执行任务
+            while (deadline.timeRemaining() > 0) {
+                // 模拟任务逻辑
+                await callback()
+            }
+            if (isStop?.()) {
+                return
+            }
+            // 如果有更多任务需要执行，可以再次请求空闲回调
+            requestIdleCallback(idleTask);
+        }
+
+        // 请求空闲回调
+        requestIdleCallback(idleTask);
+    }
     const swiper = ref<Swiper>()
     const thumbnailLists = ref([]) as Ref<any[]>
     const getThumbnailLists = async () => {
         let index = 0
-        while (index < 4) {
+        await idleTaskExecute(async () => {
+            if (index >= numPages.value) {
+                return
+            }
             const canvas = document.createElement('canvas')
             thumbnailLists.value.push({
                 index,
@@ -76,7 +107,7 @@ export default defineComponent<{
             })
             index++
             await new Promise(r => requestAnimationFrame(r))
-        }
+        }, () => index >= numPages.value)
     }
     onMounted(async () => {
         pdf.value = await getDocument(props.src).promise
@@ -205,11 +236,6 @@ export default defineComponent<{
             swiper.value?.slidePrev()
         }
     }
-    const showOutline = ref(true)
-    const outlineTabs = shallowRef([
-        { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
-        { title: '图片', icon: 'image', render: () => renderThumbnailList() },
-    ])
     const outlineTabsActive = ref('outline')
     const outlineTabsActiveRender = computed<any>(() => outlineTabs.value.find((item) => item.icon === outlineTabsActive.value)?.render || (() => { }))
     const renderOutline = () => {
