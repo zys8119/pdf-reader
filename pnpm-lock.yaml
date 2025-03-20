@@ -64,6 +64,9 @@ devDependencies:
   core-js-pure:
     specifier: ^3.41.0
     version: 3.41.0
+  drauu:
+    specifier: ^0.4.3
+    version: 0.4.3
   naive-ui:
     specifier: ^2.41.0
     version: 2.41.0(vue@3.5.13)
@@ -1349,6 +1352,10 @@ packages:
       vue: ^3.0.11
     dependencies:
       vue: 3.5.13(typescript@5.8.2)
+    dev: true
+
+  /@drauu/core@0.4.3:
+    resolution: {integrity: sha512-MmFKN0DEIS+78wtfag7DiQDuE7eSpHRt4tYh0m8bEUnxbH1v2pieQ6Ir+1WZ3Xxkkf5L5tmDfeYQtCSwUz1Hyg==}
     dev: true
 
   /@emotion/hash@0.8.0:
@@ -3266,6 +3273,12 @@ packages:
   /dommatrix@1.0.3:
     resolution: {integrity: sha512-l32Xp/TLgWb8ReqbVJAFIvXmY7go4nTxxlWiAFyhoQw9RKEOHBZNnyGvJWqDVSPmq3Y9HlM4npqF/T6VMOXhww==}
     deprecated: dommatrix is no longer maintained. Please use @thednp/dommatrix.
+    dev: true
+
+  /drauu@0.4.3:
+    resolution: {integrity: sha512-3pk6ZdfgElrEW+L4C03Xtrr7VVdSmcWlBb8cUj+WUWree2hEN8IE9fxRBL9HYG5gr8hAEXFNB0X263Um1WlYwA==}
+    dependencies:
+      '@drauu/core': 0.4.3
     dev: true
 
   /dunder-proto@1.0.1:
