@@ -174,7 +174,7 @@ export default defineComponent<{
         { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
         { title: '图片', icon: 'image', render: () => renderThumbnailList() },
     ])
-    const outlineTabsActive = ref('image')
+    const outlineTabsActive = ref('outline')
     const outlineTabsActiveRender = computed<any>(() => outlineTabs.value.find((item) => item.icon === outlineTabsActive.value)?.render || (() => { }))
     const renderOutline = () => {
         return (<>
