@@ -65,6 +65,7 @@ export default defineComponent<{
             spaceBetween: 30,
             zoom: {
                 maxRatio: 5,
+                toggle: false
             },
             direction: props.vertical ? "vertical" : "horizontal",
             virtual: {
@@ -77,12 +78,15 @@ export default defineComponent<{
                     createApp(() => h(renderCanvas(s, k))).mount(div)
                     return div
                 },
+                cache: false
             },
             pagination: {
                 el: '.swiper-pagination',
                 type: "fraction",
                 clickable: true,
             },
+            speed: 0,
+            allowTouchMove: false,
             on: {
                 slideChangeTransitionEnd: function () {
                     currentPage.value = swiper.value?.realIndex as number
