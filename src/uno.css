@@ -38,6 +38,7 @@
 /* layer: default */
 .\!bottom-auto{bottom:auto !important;}
 .\!top-50\%{top:50% !important;}
+.z-1{z-index:1;}
 .z-2{z-index:2;}
 .m-4\.145013{margin:1.03625325rem;}
 .m-76\.580384{margin:19.145096rem;}
