@@ -19,8 +19,14 @@ const svgIcon = (name = 'arrow', fontSize = '14px') => {
     </i>
 }
 export default defineComponent<{
+    // pdf文件路径
     src: string,
+    // 是否垂直模式
     vertical?: boolean
+    // 是否固定大纲
+    fixedOutline?: boolean
+    // 是否开启swiper模式
+    swiper?: boolean
 }>((props) => {
     register()
     const pdf = shallowRef<PDFDocumentProxy>() as Ref<PDFDocumentProxy>
@@ -50,9 +56,12 @@ export default defineComponent<{
             viewport,
             canvasContext: ctx
         }).promise
+        const src = canvas.toDataURL()
+        canvas.remove()
         return {
             scale,
-            canvas
+            canvas,
+            src
         }
     }
     const swiper = ref<Swiper>()
@@ -61,12 +70,10 @@ export default defineComponent<{
         let index = 0
         while (index < 4) {
             const canvas = document.createElement('canvas')
-            await render(canvas, index)
             thumbnailLists.value.push({
                 index,
-                url: canvas.toDataURL() as any
+                url: await render(canvas, index).then(res => res.src)
             })
-            canvas.remove()
             index++
             await new Promise(r => requestAnimationFrame(r))
         }
@@ -112,8 +119,10 @@ export default defineComponent<{
     const renderCanvas = (_: any, k: number) => {
         return <div class="swiper-slide flex-center">
             <div class="swiper-zoom-container  flex-center">
-                <canvas ref={el => {
-                    render(el as any, k)
+                <img ref={(el: any) => {
+                    render(document.createElement('canvas'), k).then(res => {
+                        el.src = res.src
+                    })
                 }} />
             </div>
         </div>
@@ -179,8 +188,8 @@ export default defineComponent<{
     const renderThumbnailListItem = () => {
         return thumbnailLists.value.map((item) => {
             return <div class="w-100% flex-center flex-col select-none cursor-pointer">
-                <img onClick={() => clickThumbnail(item.index)} class={`w-80% ${currentPage.value === item.index ? `b-solid b-3px b-blue` : null}`} src={item.url} alt="" />
-                <div>{item.index + 1}-{currentPage.value}</div>
+                <img onClick={() => clickThumbnail(item.index)} class={`w-80% b-solid b-3px b-#0000 ${currentPage.value === item.index ? ` !b-blue` : null}`} src={item.url} alt="" />
+                <div>{item.index + 1}</div>
             </div>
         })
     }
@@ -205,7 +214,7 @@ export default defineComponent<{
     const outlineTabsActiveRender = computed<any>(() => outlineTabs.value.find((item) => item.icon === outlineTabsActive.value)?.render || (() => { }))
     const renderOutline = () => {
         return (<>
-            <div class="flex of-auto select-none cursor-pointer b-1px b b-#e8e8e8 b-r-solid outline-panel">
+            <div class={`flex of-auto select-none cursor-pointer b-1px b b-#e8e8e8 b-r-solid outline-panel ${props.fixedOutline ? 'abs-start h-100% z-2 bg-#fff' : null}`}>
                 <div class={'text-16px flex flex-col b-1px b b-#e8e8e8 b-r-solid'}>
                     {outlineTabs.value.map((item) => (<div
                         onClick={() => outlineTabsActive.value = item.icon}
@@ -228,12 +237,11 @@ export default defineComponent<{
                     <div ref={container} class='abs-content bg-#e8e8e8'>
                         <div class="swiper abs-content">
                             <div class="swiper-wrapper"></div>
-
                         </div>
                     </div >
                 </div>
             </div>
-            <div class="flex-center select-none">
+            <div class="flex-center select-none tool-panel">
                 <div class='w-40px h-40px flex-center hover:bg-#e8e8e8 cursor-pointer hover:text-#82a7f4 text-18px' onClick={() => showOutline.value = !showOutline.value}>{svgIcon('menu')}</div>
                 <div class="flex-center flex-1 gap-10px">
                     <div class="p-x-10px flex-center hover:bg-#e8e8e8 cursor-pointer" onClick={() => updatePage(-1)}>上一页</div>
@@ -251,6 +259,14 @@ export default defineComponent<{
         vertical: {
             type: Boolean,
             default: false
+        },
+        fixedOutline: {
+            type: Boolean,
+            default: false
+        },
+        swiper: {
+            type: Boolean,
+            default: true
         }
     },
     inheritAttrs: false

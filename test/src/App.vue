@@ -1,6 +1,6 @@
 <template>
     <div class='App abs-content'>
-        <pdfReader :src="pdf"></pdfReader>
+        <pdfReader :src="pdf" fixedOutline :swiper="false"></pdfReader>
     </div>
 </template>
 <script setup lang="ts">
@@ -13,14 +13,14 @@ GlobalWorkerOptions.workerSrc = workerUrl
 <style scoped lang="less">
 .App {
     &:deep {
-        .outline-panel {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            z-index: 2;
-            background: #fff;
-        }
+        // .outline-panel {
+        //     position: absolute;
+        //     left: 0;
+        //     top: 0;
+        //     height: 100%;
+        //     z-index: 2;
+        //     background: #fff;
+        // }
     }
 }
 </style>
