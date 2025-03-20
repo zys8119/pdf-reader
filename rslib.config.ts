@@ -56,13 +56,10 @@ export default defineConfig({
         from: "./uno.css",
         context: "./src",
       },
-      // {
-      //   from: "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
-      //   context: "./",
-      //   transform: (content) => {
-      //     return babel.transformSync(content.toString(), {});
-      //   },
-      // },
+      {
+        from: "./node_modules/pdfjs-dist/legacy/build/pdf.worker.js",
+        context: "./",
+      },
     ],
     polyfill: "usage",
   },

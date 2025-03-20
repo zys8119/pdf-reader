@@ -1,5 +1,5 @@
 import 'core-js';
-import { getDocument, GlobalWorkerOptions, PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist"
+import { getDocument, GlobalWorkerOptions, PDFDocumentProxy } from "pdfjs-dist"
 import Swiper from "swiper"
 import { register } from 'swiper/element/bundle';
 import { createApp } from 'vue';
@@ -41,7 +41,9 @@ export default defineComponent<{
         }
     }
     onMounted(async () => {
+        console.log(111)
         pdf.value = await getDocument(props.src).promise
+        console.log(222)
         numPages.value = pdf.value.numPages
         outline.value = await pdf.value.getOutline()
         const swiperEl = document.querySelector('.swiper');
