@@ -11,5 +11,16 @@ import pdf from "./test1.pdf?url"
 GlobalWorkerOptions.workerSrc = workerUrl
 </script>
 <style scoped lang="less">
-.App {}
+.App {
+    &:deep {
+        .outline-panel {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            z-index: 2;
+            background: #fff;
+        }
+    }
+}
 </style>

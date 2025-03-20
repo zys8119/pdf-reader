@@ -205,7 +205,7 @@ export default defineComponent<{
     const outlineTabsActiveRender = computed<any>(() => outlineTabs.value.find((item) => item.icon === outlineTabsActive.value)?.render || (() => { }))
     const renderOutline = () => {
         return (<>
-            <div class="flex of-auto select-none cursor-pointer b-1px b b-#e8e8e8 b-r-solid">
+            <div class="flex of-auto select-none cursor-pointer b-1px b b-#e8e8e8 b-r-solid outline-panel">
                 <div class={'text-16px flex flex-col b-1px b b-#e8e8e8 b-r-solid'}>
                     {outlineTabs.value.map((item) => (<div
                         onClick={() => outlineTabsActive.value = item.icon}
