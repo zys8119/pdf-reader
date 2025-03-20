@@ -56,13 +56,16 @@ export default defineComponent<{
         }
     }
     const swiper = ref<Swiper>()
-    const thumbnailLists = ref([]) as Ref<string[]>
+    const thumbnailLists = ref([]) as Ref<any[]>
     const getThumbnailLists = async () => {
         let index = 0
-        while (index < numPages.value) {
+        while (index < 4) {
             const canvas = document.createElement('canvas')
             await render(canvas, index)
-            thumbnailLists.value.push(canvas.toDataURL() as any)
+            thumbnailLists.value.push({
+                index,
+                url: canvas.toDataURL() as any
+            })
             canvas.remove()
             index++
             await new Promise(r => requestAnimationFrame(r))
@@ -143,18 +146,20 @@ export default defineComponent<{
             })}
         </>)
     }
-
+    const clickThumbnail = (index: number) => {
+        swiper.value?.slideTo(index)
+    }
     const renderThumbnailListItem = () => {
-        return thumbnailLists.value.map((item, index) => {
-            return <div class="w-100% flex-center flex-col">
-                <img class="w-80%" src={item} alt="" />
-                <div>{index + 1}</div>
+        return thumbnailLists.value.map((item) => {
+            return <div class="w-100% flex-center flex-col select-none cursor-pointer">
+                <img onClick={() => clickThumbnail(item.index)} class={`w-80% ${currentPage.value === item.index ? `b-solid b-3px b-blue` : null}`} src={item.url} alt="" />
+                <div>{item.index + 1}</div>
             </div>
         })
     }
     const renderThumbnailList = () => {
         return (<>
-            <div class=".thumbnail-list flex flex-col gap-10px">{renderThumbnailListItem()}</div>
+            <div class=".thumbnail-list flex flex-col gap-10px bg-#e8e8e8 p-y-10px">{renderThumbnailListItem()}</div>
         </>)
     }
     const updatePage = (page: number) => {
@@ -182,7 +187,7 @@ export default defineComponent<{
                         {svgIcon(item.icon)}
                     </div>))}
                 </div>
-                <div class={'of-auto w-200px p-y-15px  bg-#e5e5e5'}>
+                <div class={'of-auto w-200px'}>
                     {outlineTabsActiveRender.value?.()}
                 </div>
             </div>
