@@ -102,8 +102,8 @@ export default defineComponent<{
             speed: 0,
             allowTouchMove: false,
             on: {
-                slideChangeTransitionEnd: function () {
-                    currentPage.value = swiper.value?.realIndex as number
+                slideChange() {
+                    currentPage.value = swiper.value?.activeIndex as number
                 }
             }
         })
@@ -180,7 +180,7 @@ export default defineComponent<{
         return thumbnailLists.value.map((item) => {
             return <div class="w-100% flex-center flex-col select-none cursor-pointer">
                 <img onClick={() => clickThumbnail(item.index)} class={`w-80% ${currentPage.value === item.index ? `b-solid b-3px b-blue` : null}`} src={item.url} alt="" />
-                <div>{item.index + 1}</div>
+                <div>{item.index + 1}-{currentPage.value}</div>
             </div>
         })
     }
