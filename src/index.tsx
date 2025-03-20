@@ -146,7 +146,8 @@ export default defineComponent<{
                 }
             }
         })
-        getThumbnailLists()
+        // 缩略图渲染
+        // getThumbnailLists()
     })
     const renderCanvas = (_: any, k: number) => {
         return <div class="swiper-slide flex-center">
@@ -257,9 +258,10 @@ export default defineComponent<{
         </>)
     }
     const svgDrauu = ref() as Ref<SVGElement>
-    const { undo, redo, canUndo, canRedo, brush, load, drauuInstance } = useDrauu(svgDrauu)
+    const { undo, redo, canUndo, canRedo, brush, load, drauuInstance } = useDrauu(svgDrauu, {
+
+    })
     const drauuClickTest = () => {
-        console.log(drauuInstance.value)
     }
     return () => (<>
         <div class={'abs-content flex flex-col of-hidden'}>
