@@ -89,3 +89,4 @@
 .hover\:text-\#82a7f4:hover{--un-text-opacity:1;color:rgb(130 167 244 / var(--un-text-opacity)) /* #82a7f4 */;}
 .outline{outline-style:solid;}
 .\!tr-y--50\%{transform:translateY(-50%) !important;}
+.try{transform:translateY(0);}

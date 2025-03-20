@@ -74,7 +74,7 @@ export default defineComponent<{
     onMounted(async () => {
         pdf.value = await getDocument(props.src).promise
         numPages.value = pdf.value.numPages
-        outline.value = await pdf.value.getOutline()
+        outline.value = await pdf.value.getOutline() || []
         const swiperEl = document.querySelector('.swiper');
         swiper.value = new Swiper(swiperEl as any, {
             spaceBetween: 30,
@@ -118,8 +118,35 @@ export default defineComponent<{
             </div>
         </div>
     }
-    const outlineClick = (item: any) => {
+    const outlineMoreClick = (item: any) => {
         item.show = !item.show
+    }
+    async function resolvePageIndex(dest: any, pdf: any) {
+        if (!dest) {
+            return null; // 没有目标位置
+        }
+
+        // 如果 dest 是数组，提取第一个元素作为目标
+        const destination = Array.isArray(dest) ? dest[0] : dest;
+
+        // 使用 pdf.pdfIndexToPageNumber 方法解析目标页码
+        const pageIndex = await pdf.getPageIndex(destination);
+
+        return pageIndex;
+    }
+    const outlineClick = async (item: any) => {
+        try {
+            if (item.dest) {
+                // 解析目标页码
+                const pageNumber = await resolvePageIndex(item.dest, pdf.value);
+                if (pageNumber !== undefined) {
+                    // 使用 Swiper 切换到指定页面
+                    swiper.value?.slideTo(pageNumber);
+                }
+            }
+        } catch (e) {
+            console.log(e)
+        }
     }
     const renderOutlineList = (outline: any[], level = 0) => {
         return (<>
@@ -129,11 +156,11 @@ export default defineComponent<{
                         '--levelGap': `${level * (level === 1 ? 10 : 30)}px`
                     }} class='flex-center-start hover:bg-#f0f0f0 cursor-pointer p-10px  p-l-$levelGap'>
                         {item.items && item.items.length > 0 ? (
-                            <div onClick={() => outlineClick(item)} class={`w-30px h-30px b-rd-100% flex-center hover:bg-#fff ${item.show ? 'transform rotate-180' : 'transform rotate-90'}`}>
+                            <div onClick={() => outlineMoreClick(item)} class={`w-30px h-30px b-rd-100% flex-center hover:bg-#fff ${item.show ? 'transform rotate-180' : 'transform rotate-90'}`}>
                                 {svgIcon('arrow')}
                             </div>
                         ) : null}
-                        <div class={'flex-1 of-hidden'}>
+                        <div class={'flex-1 of-hidden'} onClick={() => outlineClick(item)}>
                             <NEllipsis>
                                 {item.title}
                             </NEllipsis>
@@ -169,7 +196,7 @@ export default defineComponent<{
             swiper.value?.slidePrev()
         }
     }
-    const showOutline = ref(false)
+    const showOutline = ref(true)
     const outlineTabs = shallowRef([
         { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
         { title: '图片', icon: 'image', render: () => renderThumbnailList() },
