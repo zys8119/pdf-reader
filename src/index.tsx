@@ -46,16 +46,28 @@ export default defineComponent<{
         watch(scale, () => {
             canvas.style.transform = 'scale(' + scale.value + ')'
         }, { immediate: true })
-        page.render({
+        await page.render({
             viewport,
             canvasContext: ctx
-        })
+        }).promise
         return {
             scale,
             canvas
         }
     }
     const swiper = ref<Swiper>()
+    const thumbnailLists = ref([]) as Ref<string[]>
+    const getThumbnailLists = async () => {
+        let index = 0
+        while (index < numPages.value) {
+            const canvas = document.createElement('canvas')
+            await render(canvas, index)
+            thumbnailLists.value.push(canvas.toDataURL() as any)
+            canvas.remove()
+            index++
+            await new Promise(r => requestAnimationFrame(r))
+        }
+    }
     onMounted(async () => {
         pdf.value = await getDocument(props.src).promise
         numPages.value = pdf.value.numPages
@@ -74,7 +86,6 @@ export default defineComponent<{
                 renderSlide(s, k) {
                     const div = document.createElement('div')
                     div.className = 'swiper-slide'
-                    div.innerHTML = 'asdas'
                     createApp(() => h(renderCanvas(s, k))).mount(div)
                     return div
                 },
@@ -93,6 +104,7 @@ export default defineComponent<{
                 }
             }
         })
+        getThumbnailLists()
     })
     const renderCanvas = (_: any, k: number) => {
         return <div class="swiper-slide flex-center">
@@ -131,6 +143,20 @@ export default defineComponent<{
             })}
         </>)
     }
+
+    const renderThumbnailListItem = () => {
+        return thumbnailLists.value.map((item, index) => {
+            return <div class="w-100% flex-center flex-col">
+                <img class="w-80%" src={item} alt="" />
+                <div>{index + 1}</div>
+            </div>
+        })
+    }
+    const renderThumbnailList = () => {
+        return (<>
+            <div class=".thumbnail-list flex flex-col gap-10px">{renderThumbnailListItem()}</div>
+        </>)
+    }
     const updatePage = (page: number) => {
         if (page > 0) {
             swiper.value?.slideNext()
@@ -140,8 +166,8 @@ export default defineComponent<{
     }
     const showOutline = ref(true)
     const outlineTabs = shallowRef([
-        { title: '图片', icon: 'image', },
         { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
+        { title: '图片', icon: 'image', render: () => renderThumbnailList() },
     ])
     const outlineTabsActive = ref('image')
     const outlineTabsActiveRender = computed<any>(() => outlineTabs.value.find((item) => item.icon === outlineTabsActive.value)?.render || (() => { }))
@@ -156,15 +182,15 @@ export default defineComponent<{
                         {svgIcon(item.icon)}
                     </div>))}
                 </div>
-                <div class={'of-auto w-200px p-y-15px'}>
+                <div class={'of-auto w-200px p-y-15px  bg-#e5e5e5'}>
                     {outlineTabsActiveRender.value?.()}
                 </div>
             </div>
         </>)
     }
     return () => (<>
-        <div class={'abs-content flex flex-col'}>
-            <div class={'flex-1 abs-r flex'}>
+        <div class={'abs-content flex flex-col of-hidden'}>
+            <div class={'flex-1 abs-r flex of-hidden'}>
                 {showOutline.value ? renderOutline() : null}
                 <div class={'flex-1 abs-r'}>
                     <div ref={container} class='abs-content bg-#e8e8e8'>
