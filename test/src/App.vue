@@ -1,6 +1,6 @@
 <template>
     <div class='App abs-content'>
-        <pdfReader :src="pdf" fixedOutline :swiper="false"></pdfReader>
+        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline @change="change"></pdfReader>
     </div>
 </template>
 <script setup lang="ts">
@@ -8,7 +8,14 @@ import "pdf-reader/style.css"
 import pdfReader, { GlobalWorkerOptions } from "pdf-reader"
 import workerUrl from "pdf-reader/pdf.worker.mjs?url"
 import pdf from "./test1.pdf?url"
+import { onMounted, ref } from "vue"
 GlobalWorkerOptions.workerSrc = workerUrl
+
+const pdfReaderRef = ref<InstanceType<typeof pdfReader>>()
+
+const change = () => {
+    console.log(pdfReaderRef.value)
+}
 </script>
 <style scoped lang="less">
 .App {
