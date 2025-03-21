@@ -58,6 +58,7 @@ export default defineComponent<{
     }
     container: HTMLDivElement
     showOutline: boolean
+    isShowThumbnailList?: boolean
     isOpenDrauu: boolean
     pdf: PDFDocumentProxy
     thumbnailLists: any[]
@@ -82,8 +83,7 @@ export default defineComponent<{
         const showOutline = ref(false)
         const outlineTabs = shallowRef([
             { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
-            { title: '图片', icon: 'image', render: () => renderThumbnailList() },
-        ])
+        ].concat(props.isShowThumbnailList ? [{ title: '图片', icon: 'image', render: () => renderThumbnailList() }] : []))
         const currentDrauu = shallowRef<ReturnType<typeof useDrauu>>(useDrauu(document.createElement('svg')) as any)
         const currentDrauuOptopns = ref<any>({
             mode: 'draw',
