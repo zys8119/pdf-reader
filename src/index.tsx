@@ -19,6 +19,7 @@ const svgMap: any = {
     draw: <svg viewBox="0 0 1028 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14504" width="200" height="200"><path d="M871.876278 32.947837a67.103539 67.103539 0 0 0-106.224902-9.394495l-617.352556 617.352556 239.291219 236.271559 616.815728-616.882831a60.393185 60.393185 0 0 0-1.946003-96.830406z m-767.597379 652.917432l-51.871035 143.869987 146.755439 143.802883 140.917431-48.91848zM24.224377 893.483617L0.469725 1024l133.468938-17.849541z" p-id="14505"></path></svg>,
     retreat: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2125" width="200" height="200"><path d="M476.16 377.173333V227.555556A11.377778 11.377778 0 0 0 455.111111 216.746667l-312.888889 284.444444a11.377778 11.377778 0 0 0 0 17.066667l312.888889 284.444444a11.377778 11.377778 0 0 0 19.342222-7.964444v-137.102222a498.346667 498.346667 0 0 1 373.76 107.52 11.377778 11.377778 0 0 0 18.204445-11.377778c-19.911111-95.573333-106.951111-376.604444-390.257778-376.604445z" p-id="2126"></path></svg>,
     forward: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1797" width="200" height="200"><path d="M532.48 377.173333V227.555556a11.377778 11.377778 0 0 1 19.342222-7.964445l312.888889 284.444445a11.377778 11.377778 0 0 1 0 17.066666l-312.888889 284.444445a11.377778 11.377778 0 0 1-19.342222-7.964445v-139.946666a498.346667 498.346667 0 0 0-373.76 107.52 11.377778 11.377778 0 0 1-18.204444-11.377778c21.617778-95.573333 108.657778-376.604444 391.964444-376.604445z" p-id="1798"></path></svg>,
+    clear: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="17745" width="200" height="200"><path d="M433.664 250.88L773.12 590.336 599.466667 837.162667a42.666667 42.666667 0 0 1-65.066667 5.632l-61.333333-61.333334v-130.88h-130.858667L181.205333 489.6a42.666667 42.666667 0 0 1 5.632-65.066667l246.826667-173.632z m38.378667-26.986667l66.133333-46.528a42.666667 42.666667 0 0 1 54.72 4.714667l89.130667 89.152 93.781333-93.781333a21.333333 21.333333 0 0 1 30.165333 0l35.2 35.2a21.333333 21.333333 0 0 1 0 30.186666l-93.76 93.76 94.506667 94.506667a42.666667 42.666667 0 0 1 4.714667 54.72l-46.506667 66.133333-328.106667-328.064z" p-id="17746"></path></svg>,
 }
 const svgIcon = (name = 'arrow', fontSize = '14px') => {
     return h(defineComponent(() => {
@@ -137,16 +138,22 @@ export default defineComponent<{
     }
     const drauuTools = computed<DrauuToolsType[]>(() => [
         {
+            title: '清空', icon: 'clear', action() {
+                currentDrauu.value.clear()
+            },
+            className: 'text-red text-32px'
+        },
+        {
             title: '后退', icon: 'retreat', action() {
                 currentDrauu.value.undo()
             },
-            className: !currentDrauu.value.canUndo.value ? 'opacity-30' : ''
+            className: !currentDrauu.value.canUndo.value ? 'opacity-30 text-32px' : 'text-32px'
         },
         {
             title: '前进', icon: 'forward', action() {
                 currentDrauu.value.redo()
             },
-            className: !currentDrauu.value.canRedo.value ? 'opacity-30' : ''
+            className: !currentDrauu.value.canRedo.value ? 'opacity-30 text-32px' : 'text-32px'
         },
         {
             title: '颜色', icon: 'color',
@@ -156,10 +163,10 @@ export default defineComponent<{
             },
             nDropdownProps: {
                 onSelect(e: any, option: any) {
-                    console.log(option.value)
                     currentDrauuOptopns.value.color = option.value
                 }
-            }
+            },
+            className: 'text-32px'
         },
         {
             title: '手写模式', icon: handwritingModelIcon.value,
@@ -168,12 +175,14 @@ export default defineComponent<{
                 onSelect(e: any, option: any) {
                     currentDrauuOptopns.value.mode = option.value
                 }
-            }
+            },
+            className: 'text-20px'
         },
         {
             title: '是否开启手写面板', icon: 'eye', action: () => {
                 isOpenDrauu.value = isOpenDrauu.value ? false : true
-            }
+            },
+            className: 'text-25px'
         },
     ])
     const render = async (canvas: HTMLCanvasElement, pageIndex: number) => {

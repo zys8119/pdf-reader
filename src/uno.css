@@ -100,9 +100,13 @@
 .p-l-\$levelGap{padding-left:var(--levelGap);}
 .text-16px{font-size:16px;}
 .text-18px{font-size:18px;}
+.text-20px{font-size:20px;}
+.text-25px{font-size:25px;}
+.text-32px{font-size:32px;}
 .text-\#007bff{--un-text-opacity:1;color:rgb(0 123 255 / var(--un-text-opacity)) /* #007bff */;}
 .text-\#82a7f4{--un-text-opacity:1;color:rgb(130 167 244 / var(--un-text-opacity)) /* #82a7f4 */;}
 .text-\$fontSize{color:var(--fontSize) /* var(--fontSize) */;}
+.text-red{--un-text-opacity:1;color:rgb(248 113 113 / var(--un-text-opacity)) /* #f87171 */;}
 .\!hover\:text-\#007bff:hover{--un-text-opacity:1 !important;color:rgb(0 123 255 / var(--un-text-opacity)) /* #007bff */ !important;}
 .hover\:text-\#82a7f4:hover{--un-text-opacity:1;color:rgb(130 167 244 / var(--un-text-opacity)) /* #82a7f4 */;}
 .opacity-30{opacity:0.3;}
