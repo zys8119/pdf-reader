@@ -33,6 +33,8 @@ export default defineComponent<{
     const pdf = shallowRef<PDFDocumentProxy>() as Ref<PDFDocumentProxy>
     const numPages = ref(0)
     const currentPage = ref(0)
+
+    const currentDrauu = shallowRef<ReturnType<typeof useDrauu>>(useDrauu(document.createElement('svg')) as any)
     // 大纲
     const outline = ref<any[]>([])
     const container = ref<HTMLDivElement>() as Ref<HTMLDivElement>
@@ -142,6 +144,8 @@ export default defineComponent<{
 
     const renderCanvas = (_: any, k: number) => {
         return defineComponent(() => {
+            const svgDrauu = ref()
+            const drauu = useDrauu(svgDrauu)
             const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
             const src = ref<any>(null)
             const { width: boxw, height: boxh } = useElementSize(container)
@@ -160,13 +164,18 @@ export default defineComponent<{
                 width: viewport.value.wdith + 'px',
                 height: viewport.value.height + 'px',
             }) as any)
+
             onMounted(async () => {
                 const res = await render(document.createElement('canvas'), k)
                 viewport.value = res.viewport
                 src.value = res.src
+                watch(currentPage, () => {
+                    if (k === currentPage.value) {
+                        currentDrauu.value = drauu
+                    }
+                }, { immediate: true })
             })
-            const svgDrauu = ref()
-            const { } = useDrauu(svgDrauu)
+
             return () => <div class="swiper-slide flex-center">
                 <div class="swiper-zoom-container  flex-center">
                     <div class="abs-r transform-scale-$scale w-$width h-$height" ref={elBox} >
@@ -274,6 +283,9 @@ export default defineComponent<{
             </div>
         </>)
     }
+    const aa = () => {
+        console.log(currentDrauu.value.clear())
+    }
     return () => (<>
         <div class={'abs-content flex flex-col of-hidden'}>
             <div class={'flex-1 abs-r flex of-hidden'}>
@@ -295,6 +307,7 @@ export default defineComponent<{
                     </div>
                     <div class="p-x-10px flex-center hover:bg-#e8e8e8 cursor-pointer" onClick={() => updatePage(1)}>下一页</div>
                 </div>
+                <button onClick={aa}>asdas</button>
             </div>
         </div>
     </>)
