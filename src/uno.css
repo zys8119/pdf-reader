@@ -87,13 +87,16 @@
 .hover\:bg-\#fff:hover{--un-bg-opacity:1;background-color:rgb(255 255 255 / var(--un-bg-opacity)) /* #fff */;}
 .p-10px{padding:10px;}
 .p-x-10px{padding-left:10px;padding-right:10px;}
+.p-x-15px{padding-left:15px;padding-right:15px;}
 .p-y-10px{padding-top:10px;padding-bottom:10px;}
 .px{padding-left:1rem;padding-right:1rem;}
 .p-l-\$levelGap{padding-left:var(--levelGap);}
 .text-16px{font-size:16px;}
 .text-18px{font-size:18px;}
+.text-\#007bff{--un-text-opacity:1;color:rgb(0 123 255 / var(--un-text-opacity)) /* #007bff */;}
 .text-\#82a7f4{--un-text-opacity:1;color:rgb(130 167 244 / var(--un-text-opacity)) /* #82a7f4 */;}
 .text-\$fontSize{color:var(--fontSize) /* var(--fontSize) */;}
+.\!hover\:text-\#007bff:hover{--un-text-opacity:1 !important;color:rgb(0 123 255 / var(--un-text-opacity)) /* #007bff */ !important;}
 .hover\:text-\#82a7f4:hover{--un-text-opacity:1;color:rgb(130 167 244 / var(--un-text-opacity)) /* #82a7f4 */;}
 .outline{outline-style:solid;}
 .\!tr-y--50\%{transform:translateY(-50%) !important;}
