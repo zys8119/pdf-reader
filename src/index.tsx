@@ -43,21 +43,12 @@ export default defineComponent<{
         { title: '图片', icon: 'image', render: () => renderThumbnailList() },
     ])
     const render = async (canvas: HTMLCanvasElement, pageIndex: number) => {
-        const { width: boxw, height: boxh } = useElementSize(container)
-        const { width: cw, height: ch } = useElementSize(canvas)
-        const scale = computed(() => {
-            const w = boxw.value / cw.value
-            const h = boxh.value / ch.value
-            return Math.min(w, h)
-        })
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
         const page = await pdf.value.getPage(pageIndex + 1)
         const viewport = page.getViewport({ scale: 5 })
         canvas.height = viewport.height
         canvas.width = viewport.width
-        watch(scale, () => {
-            canvas.style.transform = 'scale(' + scale.value + ')'
-        }, { immediate: true })
+
         await page.render({
             viewport,
             canvasContext: ctx
@@ -65,9 +56,8 @@ export default defineComponent<{
         const src = canvas.toDataURL()
         canvas.remove()
         return {
-            scale,
-            canvas,
-            src
+            src,
+            viewport
         }
     }
     /**
@@ -149,16 +139,43 @@ export default defineComponent<{
         // 缩略图渲染
         // getThumbnailLists()
     })
+
     const renderCanvas = (_: any, k: number) => {
-        return <div class="swiper-slide flex-center">
-            <div class="swiper-zoom-container  flex-center">
-                <img ref={(el: any) => {
-                    render(document.createElement('canvas'), k).then(res => {
-                        el.src = res.src
-                    })
-                }} />
+        return defineComponent(() => {
+            const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
+            const src = ref<any>(null)
+            const { width: boxw, height: boxh } = useElementSize(container)
+            const { width: cw, height: ch } = useElementSize(elBox)
+            const scale = computed(() => {
+                const w = boxw.value / cw.value
+                const h = boxh.value / ch.value
+                return Math.min(w, h)
+            })
+            const viewport = shallowRef<any>({
+                width: 0,
+                height: 0,
+            })
+            useCssVars(() => ({
+                scale: scale.value,
+                width: viewport.value.wdith + 'px',
+                height: viewport.value.height + 'px',
+            }) as any)
+            onMounted(async () => {
+                const res = await render(document.createElement('canvas'), k)
+                viewport.value = res.viewport
+                src.value = res.src
+            })
+            const svgDrauu = ref()
+            const { } = useDrauu(svgDrauu)
+            return () => <div class="swiper-slide flex-center">
+                <div class="swiper-zoom-container  flex-center">
+                    <div class="abs-r transform-scale-$scale w-$width h-$height" ref={elBox} >
+                        <img class='img' alt="" src={src.value} />
+                        <svg class="abs-content" ref={svgDrauu}></svg>
+                    </div>
+                </div>
             </div>
-        </div>
+        })
     }
     const outlineMoreClick = (item: any) => {
         item.show = !item.show
@@ -257,17 +274,6 @@ export default defineComponent<{
             </div>
         </>)
     }
-    const svgDrauu = ref() as Ref<SVGElement>
-    const { undo, redo, canUndo, canRedo, brush, load, drauuInstance } = useDrauu(svgDrauu, {
-
-    })
-    const drauuClickTest = () => {
-        console.log(svgDrauu.value.outerHTML)
-    }
-    onMounted(async () => {
-        await nextTick()
-        load(``)
-    })
     return () => (<>
         <div class={'abs-content flex flex-col of-hidden'}>
             <div class={'flex-1 abs-r flex of-hidden'}>
@@ -276,9 +282,6 @@ export default defineComponent<{
                     <div ref={container} class='abs-content bg-#e8e8e8'>
                         <div class="swiper abs-content">
                             <div class="swiper-wrapper"></div>
-                        </div>
-                        <div class="abs-content z-1">
-                            <svg class="abs-content" ref={svgDrauu} />
                         </div>
                     </div >
                 </div>
@@ -292,7 +295,6 @@ export default defineComponent<{
                     </div>
                     <div class="p-x-10px flex-center hover:bg-#e8e8e8 cursor-pointer" onClick={() => updatePage(1)}>下一页</div>
                 </div>
-                <button onClick={drauuClickTest}>drauu</button>
             </div>
         </div>
     </>)
