@@ -3,7 +3,7 @@ import { getDocument, GlobalWorkerOptions, PDFDocumentProxy } from "pdfjs-dist"
 import Swiper from "swiper"
 import { register } from 'swiper/element/bundle';
 import { createApp } from 'vue';
-import { NEllipsis } from 'naive-ui';
+import { NEllipsis, NDropdown } from 'naive-ui';
 import { useDrauu } from '@vueuse/integrations/useDrauu'
 const svgMap: any = {
     arrow: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2642" width="200" height="200"><path d="M768 682.666667c-12.8 0-21.333333-4.266667-29.866667-12.8L512 443.733333l-226.133333 226.133334c-17.066667 17.066667-42.666667 17.066667-59.733334 0s-17.066667-42.666667 0-59.733334l256-256c17.066667-17.066667 42.666667-17.066667 59.733334 0l256 256c17.066667 17.066667 17.066667 42.666667 0 59.733334-8.533333 8.533333-17.066667 12.8-29.866667 12.8z"></path></svg>,
@@ -11,6 +11,7 @@ const svgMap: any = {
     image: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8856" width="200" height="200"><path d="M158.2 158.5h707.6c20.3 0 36.6 16.3 36.6 36.6v288.7c-36.6-28.5-105.7-73.2-158.6-73.2-77.3 0-146.4 178.9-231.8 178.9-65.1-4.1-154.5-77.3-256.2-65.1-40.7 8.1-97.6 73.2-134.2 122V195.1c0-20.4 16.3-36.6 36.6-36.6zM329 451.3c-32.5 0-61-12.2-81.3-32.5s-32.5-52.9-32.5-81.3c0-28.5 12.2-61 32.5-81.3 20.3-20.3 48.8-32.5 81.3-32.5 28.5 0 56.9 12.2 81.3 32.5 20.3 20.3 32.5 52.9 32.5 81.3 0 28.5-12.2 61-32.5 81.3-24.4 20.3-52.8 32.5-81.3 32.5z m557.1-345.7H137.9c-40.7 0-73.2 32.5-73.2 73.2v666.9c0 40.7 32.5 73.2 73.2 73.2h748.3c40.7 0 73.2-32.5 73.2-73.2V178.8c-0.1-40.7-32.6-73.2-73.3-73.2z m0 0" p-id="8857"></path></svg>,
     menu: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3949" width="200" height="200"><path d="M170.666667 213.333333h682.666666v85.333334H170.666667V213.333333z m0 512h682.666666v85.333334H170.666667v-85.333334z m0-256h682.666666v85.333334H170.666667v-85.333334z" p-id="3950"></path></svg>,
     handwriting: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4806" width="200" height="200"><path d="M635.973818 120.157091L230.469818 526.801455c-44.706909 44.869818-175.197091 311.621818-175.197091 311.621818s-5.748364 24.250182 9.076364 38.050909c15.755636 14.638545 36.770909 6.516364 36.770909 6.516363s274.106182-138.821818 310.132364-174.94109l26.996363-27.066182 378.484364-379.578182-180.759273-181.248zM910.429091 71.517091l-45.195636-45.312C846.545455 7.447273 820.503273-0.465455 793.6 1.931636c-26.949818 2.397091-54.784 15.104-77.172364 37.538909l-26.973091 27.04291 180.759273 181.271272 26.996364-27.066182c44.753455-44.869818 50.664727-111.709091 13.195636-149.178181M961.629091 1022.603636c-8.285091 0-16.593455-2.699636-23.528727-8.285091-1.047273-0.837818-111.732364-88.157091-247.435637-94.72-89.227636-4.282182-165.329455 20.270545-245.922909 46.289455-51.176727 16.523636-104.098909 33.582545-160.046545 42.309818-132.002909 20.573091-229.236364-4.235636-233.309091-5.306182a37.701818 37.701818 0 0 1 18.897454-72.983272c0.861091 0.232727 87.156364 21.806545 202.868364 3.770181 50.082909-7.796364 97.931636-23.226182 148.573091-39.563636 83.432727-26.926545 169.704727-54.760727 272.523636-49.803636 160.721455 7.749818 285.696 106.984727 290.909091 111.197091 16.197818 13.032727 18.804364 36.770909 5.794909 53.015272a37.469091 37.469091 0 0 1-29.323636 14.103273" p-id="4807"></path></svg>,
+    eye: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8440" width="200" height="200"><path d="M512 73.152c231.68 0 429.76 180.8 512 436.928-82.24 258.624-280.32 440.768-512 440.768-231.744 0-429.824-182.144-512-440.512 82.176-256.384 280.32-437.184 512-437.184z m0 109.696c-168.192 0-320.64 127.424-395.904 327.616C191.36 712.512 343.936 841.152 512 841.152c168.128 0 320.768-128.768 395.904-330.88C832.576 310.272 680 182.912 512 182.912z m0 108.544c24.704 0 48.384 4.992 70.272 13.952h-0.768c-51.392 0-93.056 46.272-93.056 103.232s41.6 103.168 93.056 103.168c51.328 0 92.992-46.208 92.992-103.168a112 112 0 0 0-4.672-32.384c26.88 37.76 42.88 85.376 42.88 137.28 0 122.56-89.856 221.952-200.768 221.952-110.784 0-200.704-99.392-200.704-221.952 0-122.688 89.92-222.08 200.704-222.08z" p-id="8441"></path></svg>,
 }
 const svgIcon = (name = 'arrow', fontSize = '14px') => {
     return <i style={{
@@ -48,14 +49,20 @@ export default defineComponent<{
         title: string
         icon: string
         action(data: DrauuToolsType): void
+        options?: any
     }
-    const isOpenDrauu = ref(false)
+    const isOpenDrauu = ref(true)
     const drauuTools = ref<DrauuToolsType[]>([
         {
-            title: '手写', icon: 'handwriting', action: () => {
+            title: '手写模式', icon: 'handwriting', action: () => {
                 isOpenDrauu.value = isOpenDrauu.value ? false : true
             }
-        }
+        },
+        {
+            title: '是否开启手写面板', icon: 'eye', action: () => {
+                isOpenDrauu.value = isOpenDrauu.value ? false : true
+            }
+        },
     ])
     const aa = () => {
         console.log(currentDrauu.value.clear())
@@ -196,7 +203,7 @@ export default defineComponent<{
                 <div class="swiper-zoom-container  flex-center">
                     <div class="abs-r transform-scale-$scale w-$width h-$height" ref={elBox} >
                         <img class='img' alt="" src={src.value} />
-                        <svg class="abs-content" ref={svgDrauu}></svg>
+                        {isOpenDrauu.value ? <svg class="abs-content" ref={svgDrauu}></svg> : null}
                     </div>
                 </div>
             </div>
@@ -302,13 +309,15 @@ export default defineComponent<{
 
     const renderDrauuToolsItem = () => {
         const classMap: Record<string, ComputedRef<string>> = {
-            'handwriting': computed(() => isOpenDrauu.value ? 'text-#007bff !hover:text-#007bff' : '')
+            'eye': computed(() => isOpenDrauu.value ? 'text-#007bff !hover:text-#007bff' : '')
         }
-        return drauuTools.value.map((item) => {
+        return drauuTools.value.map((item, k) => {
             return <div onClick={() => item.action?.(item)}
-                class={`w-30px h-30px flex-center cursor-pointer hover:text-#82a7f4 ${classMap?.[item.icon]?.value}`}
+                class={`w-30px h-30px p-x-10px flex-center cursor-pointer hover:text-#82a7f4 b-1px b-#e8e8e8 b-r-dashed ${classMap?.[item.icon]?.value} ${k === 0 ? ' b-l-solid ' : ''}`}
             >
-                {svgIcon('handwriting')}
+                {item.options ? <NDropdown trigger="hover" options={item.options}>
+                    {svgIcon(item.icon)}
+                </NDropdown> : svgIcon(item.icon)}
             </div>
         })
     }

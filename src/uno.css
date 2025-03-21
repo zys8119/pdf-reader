@@ -78,6 +78,8 @@
 .b-\#e8e8e8{--un-border-opacity:1;border-color:rgb(232 232 232 / var(--un-border-opacity));}
 .b-rd-100\%{border-radius:100%;}
 .b-solid{border-style:solid;}
+.b-l-solid{border-left-style:solid;}
+.b-r-dashed{border-right-style:dashed;}
 .b-r-solid{border-right-style:solid;}
 .bg-\#82a7f4{--un-bg-opacity:1;background-color:rgb(130 167 244 / var(--un-bg-opacity)) /* #82a7f4 */;}
 .bg-\#e8e8e8{--un-bg-opacity:1;background-color:rgb(232 232 232 / var(--un-bg-opacity)) /* #e8e8e8 */;}
