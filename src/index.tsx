@@ -17,6 +17,8 @@ const svgMap: any = {
     ellipse: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12417" width="200" height="200"><path d="M512 928C282.624 928 96 741.376 96 512S282.624 96 512 96s416 186.624 416 416-186.624 416-416 416z m0-768C317.92 160 160 317.92 160 512s157.92 352 352 352 352-157.92 352-352S706.08 160 512 160z" p-id="12418"></path></svg>,
     eraseLine: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13436" width="200" height="200"><path d="M567.024534 149.331607m60.339779 60.339778l199.422968 199.422969q60.339779 60.339779 0 120.679557l-184.941421 184.941422q-60.339779 60.339779-120.679558 0l-199.422968-199.422969q-60.339779-60.339779 0-120.679557l184.941421-184.941422q60.339779-60.339779 120.679558 0Z" fill="#666666" p-id="13437"></path><path d="M557.653333 256l211.2 213.333333-302.08 298.666667H346.88l-151.466667-151.466667L557.653333 256m0-85.333333a85.333333 85.333333 0 0 0-60.586666 24.746666L135.253333 554.666667a85.333333 85.333333 0 0 0 0 120.746666L311.466667 853.333333h190.293333l327.253333-327.253333a85.333333 85.333333 0 0 0 0-120.746667l-211.2-211.2A85.333333 85.333333 0 0 0 557.653333 170.666667z" fill="#666666" p-id="13438"></path><path d="M332.8 768m42.666667 0l469.333333 0q42.666667 0 42.666667 42.666667l0 0q0 42.666667-42.666667 42.666666l-469.333333 0q-42.666667 0-42.666667-42.666666l0 0q0-42.666667 42.666667-42.666667Z" p-id="13439"></path></svg>,
     draw: <svg viewBox="0 0 1028 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14504" width="200" height="200"><path d="M871.876278 32.947837a67.103539 67.103539 0 0 0-106.224902-9.394495l-617.352556 617.352556 239.291219 236.271559 616.815728-616.882831a60.393185 60.393185 0 0 0-1.946003-96.830406z m-767.597379 652.917432l-51.871035 143.869987 146.755439 143.802883 140.917431-48.91848zM24.224377 893.483617L0.469725 1024l133.468938-17.849541z" p-id="14505"></path></svg>,
+    retreat: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2125" width="200" height="200"><path d="M476.16 377.173333V227.555556A11.377778 11.377778 0 0 0 455.111111 216.746667l-312.888889 284.444444a11.377778 11.377778 0 0 0 0 17.066667l312.888889 284.444444a11.377778 11.377778 0 0 0 19.342222-7.964444v-137.102222a498.346667 498.346667 0 0 1 373.76 107.52 11.377778 11.377778 0 0 0 18.204445-11.377778c-19.911111-95.573333-106.951111-376.604444-390.257778-376.604445z" p-id="2126"></path></svg>,
+    forward: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1797" width="200" height="200"><path d="M532.48 377.173333V227.555556a11.377778 11.377778 0 0 1 19.342222-7.964445l312.888889 284.444445a11.377778 11.377778 0 0 1 0 17.066666l-312.888889 284.444445a11.377778 11.377778 0 0 1-19.342222-7.964445v-139.946666a498.346667 498.346667 0 0 0-373.76 107.52 11.377778 11.377778 0 0 1-18.204444-11.377778c21.617778-95.573333 108.657778-376.604444 391.964444-376.604445z" p-id="1798"></path></svg>,
 }
 const svgIcon = (name = 'arrow', fontSize = '14px') => {
     return h(defineComponent(() => {
@@ -54,14 +56,8 @@ export default defineComponent<{
     const currentDrauu = shallowRef<ReturnType<typeof useDrauu>>(useDrauu(document.createElement('svg')) as any)
     const currentDrauuOptopns = ref<any>({
         mode: 'draw',
+        color: '#000',
     })
-    type DrauuToolsType = {
-        title: string
-        icon: string
-        action?(data: DrauuToolsType): void
-        options?: any
-        nDropdownProps?: Record<string, any>
-    }
     const isOpenDrauu = ref(true)
     const handwritingModelOptions = ref([
         {
@@ -113,8 +109,58 @@ export default defineComponent<{
             iconName: 'eraseLine'
         },
     ])
+    const handwritingColorsLabelRender = (color: any) => {
+        return <div style={{
+            '--color': color
+        }} class="w-25px h-25px b-rd-100% bg-$color b-1px b-solid b-#e8e8e8"></div>
+    }
+    const handwritingColorsOptions = ref([
+        { label: '红色', value: '#f00' },
+        { label: '白色', value: '#fff' },
+        { label: '黑色', value: '#000' },
+        { label: '黄色', value: '#ff0' },
+        { label: '绿色', value: '#0f0' },
+        { label: '蓝色', value: '#00f' },
+        { label: '青色', value: '#0ff' },
+    ].map(e => ({
+        ...e, label: () => handwritingColorsLabelRender(e.value)
+    })))
     const handwritingModelIcon = computed(() => handwritingModelOptions.value.find(v => v.value === currentDrauuOptopns.value.mode)?.iconName || 'draw')
+    type DrauuToolsType = {
+        title: string
+        icon: string
+        action?(data: DrauuToolsType): void
+        render?(data: DrauuToolsType): any
+        options?: any
+        nDropdownProps?: Record<string, any>
+        className?: string
+    }
     const drauuTools = computed<DrauuToolsType[]>(() => [
+        {
+            title: '后退', icon: 'retreat', action() {
+                currentDrauu.value.undo()
+            },
+            className: !currentDrauu.value.canUndo.value ? 'opacity-30' : ''
+        },
+        {
+            title: '前进', icon: 'forward', action() {
+                currentDrauu.value.redo()
+            },
+            className: !currentDrauu.value.canRedo.value ? 'opacity-30' : ''
+        },
+        {
+            title: '颜色', icon: 'color',
+            options: handwritingColorsOptions.value,
+            render() {
+                return handwritingColorsLabelRender(currentDrauu.value.brush.value.color)
+            },
+            nDropdownProps: {
+                onSelect(e: any, option: any) {
+                    console.log(option.value)
+                    currentDrauuOptopns.value.color = option.value
+                }
+            }
+        },
         {
             title: '手写模式', icon: handwritingModelIcon.value,
             options: handwritingModelOptions.value,
@@ -232,14 +278,13 @@ export default defineComponent<{
         return defineComponent(() => {
             const svgDrauu = ref()
             const drauu = useDrauu(svgDrauu, {
-                brush: {
-                    mode: currentDrauuOptopns.value.mode,
-                    color: 'red',
-                    size: 3,
-                }
+                brush: currentDrauuOptopns.value
             })
             watch(currentDrauuOptopns, (val) => {
-                drauu.brush.value.mode = val.mode
+                drauu.brush.value = {
+                    ...drauu.brush.value,
+                    ...val
+                }
             }, { immediate: true, deep: true })
             const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
             const src = ref<any>(null)
@@ -385,7 +430,7 @@ export default defineComponent<{
         }
         return drauuTools.value.map((item, k) => {
             return <div onClick={() => item.action?.(item)}
-                class={`w-30px h-30px p-x-10px flex-center cursor-pointer of-hidden hover:text-#82a7f4 b-1px b-#e8e8e8 b-r-dashed ${classMap?.[item.icon]?.value} ${k === 0 ? ' b-l-solid ' : ''}`}
+                class={`w-30px h-30px p-x-10px flex-center cursor-pointer of-hidden hover:text-#82a7f4 b-1px b-#e8e8e8 b-r-dashed ${classMap?.[item.icon]?.value} ${k === 0 ? ' b-l-solid ' : ''} ${item.className || ''}`}
             >
                 {item.options ? <NDropdown
                     trigger="click"
@@ -393,8 +438,8 @@ export default defineComponent<{
                     options={item.options}
                     {...item.nDropdownProps}
                 >
-                    <span>{svgIcon(item.icon)}</span>
-                </NDropdown> : svgIcon(item.icon)}
+                    <span>{item.render?.(item) || svgIcon(item.icon)}</span>
+                </NDropdown> : (item.render?.(item) || svgIcon(item.icon))}
             </div>
         })
     }
