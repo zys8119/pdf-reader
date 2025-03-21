@@ -1,5 +1,5 @@
 {
-  "name": "pdf-reader",
+  "name": "@zys/pdf-reader",
   "version": "0.0.1",
   "type": "module",
   "exports": {
