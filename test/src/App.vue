@@ -1,7 +1,7 @@
 <template>
     <div class='App abs-content flex flex-col'>
         <div class="abs-r flex-1">
-            <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline @change="change" :showTools="false"></pdfReader>
+            <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline @change="change"></pdfReader>
         </div>
         <div>
             <button @click="test">asd</button>
