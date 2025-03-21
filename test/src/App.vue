@@ -1,6 +1,11 @@
 <template>
-    <div class='App abs-content'>
-        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline @change="change"></pdfReader>
+    <div class='App abs-content flex flex-col'>
+        <div class="abs-r flex-1">
+            <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline @change="change" :showTools="false"></pdfReader>
+        </div>
+        <div>
+            <button @click="test">asd</button>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -15,6 +20,12 @@ const pdfReaderRef = ref<InstanceType<typeof pdfReader>>()
 
 const change = () => {
     console.log(pdfReaderRef.value)
+}
+onMounted(() => {
+    pdfReaderRef.value.isOpenDrauu = false
+})
+const test = () => {
+    pdfReaderRef.value?.nextPage()
 }
 </script>
 <style scoped lang="less">
