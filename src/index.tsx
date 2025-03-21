@@ -45,6 +45,8 @@ export default defineComponent<{
     const pdf = shallowRef<PDFDocumentProxy>() as Ref<PDFDocumentProxy>
     const numPages = ref(0)
     const currentPage = ref(0)
+    // 批注
+    const annotations = ref<Record<any, any>>({})
     // 大纲
     const outline = ref<any[]>([])
     const container = ref<HTMLDivElement>() as Ref<HTMLDivElement>
@@ -286,13 +288,28 @@ export default defineComponent<{
     const renderCanvas = (_: any, k: number) => {
         return defineComponent(() => {
             const svgDrauu = ref()
-            const drauu = useDrauu(svgDrauu)
-            watch(currentDrauuOptopns, (val) => {
+            const drauu = useDrauu(svgDrauu, {
+
+            })
+            const syncConfig = () => {
                 drauu.brush.value = {
                     ...drauu.brush.value,
-                    ...val
+                    ...currentDrauuOptopns.value
                 }
-            }, { immediate: true, deep: true })
+            }
+            let off = () => { }
+            const init = async () => {
+                syncConfig()
+                // 清除之前的事件
+                off()
+                // 回显数据
+                drauu.load(annotations.value[k] || '')
+                off = drauu.onChanged(() => {
+                    // 储存数据
+                    annotations.value[k] = drauu.dump()
+                }).off
+            }
+            watch(currentDrauuOptopns, syncConfig, { immediate: true, deep: true })
             const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
             const src = ref<any>(null)
             const { width: boxw, height: boxh } = useElementSize(container)
@@ -311,7 +328,6 @@ export default defineComponent<{
                 width: viewport.value.wdith + 'px',
                 height: viewport.value.height + 'px',
             }) as any)
-
             onMounted(async () => {
                 const res = await render(document.createElement('canvas'), k)
                 viewport.value = res.viewport
@@ -319,6 +335,7 @@ export default defineComponent<{
                 watch(currentPage, () => {
                     if (k === currentPage.value) {
                         currentDrauu.value = drauu
+                        init()
                     }
                 }, { immediate: true })
             })
