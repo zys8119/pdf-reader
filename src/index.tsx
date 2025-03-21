@@ -12,14 +12,21 @@ const svgMap: any = {
     menu: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3949" width="200" height="200"><path d="M170.666667 213.333333h682.666666v85.333334H170.666667V213.333333z m0 512h682.666666v85.333334H170.666667v-85.333334z m0-256h682.666666v85.333334H170.666667v-85.333334z" p-id="3950"></path></svg>,
     handwriting: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4806" width="200" height="200"><path d="M635.973818 120.157091L230.469818 526.801455c-44.706909 44.869818-175.197091 311.621818-175.197091 311.621818s-5.748364 24.250182 9.076364 38.050909c15.755636 14.638545 36.770909 6.516364 36.770909 6.516363s274.106182-138.821818 310.132364-174.94109l26.996363-27.066182 378.484364-379.578182-180.759273-181.248zM910.429091 71.517091l-45.195636-45.312C846.545455 7.447273 820.503273-0.465455 793.6 1.931636c-26.949818 2.397091-54.784 15.104-77.172364 37.538909l-26.973091 27.04291 180.759273 181.271272 26.996364-27.066182c44.753455-44.869818 50.664727-111.709091 13.195636-149.178181M961.629091 1022.603636c-8.285091 0-16.593455-2.699636-23.528727-8.285091-1.047273-0.837818-111.732364-88.157091-247.435637-94.72-89.227636-4.282182-165.329455 20.270545-245.922909 46.289455-51.176727 16.523636-104.098909 33.582545-160.046545 42.309818-132.002909 20.573091-229.236364-4.235636-233.309091-5.306182a37.701818 37.701818 0 0 1 18.897454-72.983272c0.861091 0.232727 87.156364 21.806545 202.868364 3.770181 50.082909-7.796364 97.931636-23.226182 148.573091-39.563636 83.432727-26.926545 169.704727-54.760727 272.523636-49.803636 160.721455 7.749818 285.696 106.984727 290.909091 111.197091 16.197818 13.032727 18.804364 36.770909 5.794909 53.015272a37.469091 37.469091 0 0 1-29.323636 14.103273" p-id="4807"></path></svg>,
     eye: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8440" width="200" height="200"><path d="M512 73.152c231.68 0 429.76 180.8 512 436.928-82.24 258.624-280.32 440.768-512 440.768-231.744 0-429.824-182.144-512-440.512 82.176-256.384 280.32-437.184 512-437.184z m0 109.696c-168.192 0-320.64 127.424-395.904 327.616C191.36 712.512 343.936 841.152 512 841.152c168.128 0 320.768-128.768 395.904-330.88C832.576 310.272 680 182.912 512 182.912z m0 108.544c24.704 0 48.384 4.992 70.272 13.952h-0.768c-51.392 0-93.056 46.272-93.056 103.232s41.6 103.168 93.056 103.168c51.328 0 92.992-46.208 92.992-103.168a112 112 0 0 0-4.672-32.384c26.88 37.76 42.88 85.376 42.88 137.28 0 122.56-89.856 221.952-200.768 221.952-110.784 0-200.704-99.392-200.704-221.952 0-122.688 89.92-222.08 200.704-222.08z" p-id="8441"></path></svg>,
+    line: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10410" width="200" height="200"><path d="M191.488 864.768c-8.192 0-16.384-3.072-22.528-9.216-12.288-12.288-12.288-32.768 0-45.056L809.472 168.96c12.288-12.288 32.768-12.288 45.056 0s12.288 32.768 0 45.056L214.016 855.04c-6.144 6.144-14.336 9.728-22.528 9.728z" p-id="10411"></path></svg>,
+    rectangle: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11394" width="200" height="200"><path d="M841.34 959.36H182.66c-65.06 0-117.99-52.94-117.99-118.02V182.69c0-65.08 52.94-118.04 117.99-118.04h658.68c65.06 0 117.99 52.96 117.99 118.04v658.65c0 65.08-52.93 118.02-117.99 118.02zM182.66 142.17c-22.31 0-40.51 18.18-40.51 40.51v658.65c0 22.34 18.2 40.49 40.51 40.49h658.68c22.31 0 40.51-18.15 40.51-40.49V182.69c0-22.34-18.2-40.51-40.51-40.51H182.66z" p-id="11395"></path></svg>,
+    ellipse: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12417" width="200" height="200"><path d="M512 928C282.624 928 96 741.376 96 512S282.624 96 512 96s416 186.624 416 416-186.624 416-416 416z m0-768C317.92 160 160 317.92 160 512s157.92 352 352 352 352-157.92 352-352S706.08 160 512 160z" p-id="12418"></path></svg>,
+    eraseLine: <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13436" width="200" height="200"><path d="M567.024534 149.331607m60.339779 60.339778l199.422968 199.422969q60.339779 60.339779 0 120.679557l-184.941421 184.941422q-60.339779 60.339779-120.679558 0l-199.422968-199.422969q-60.339779-60.339779 0-120.679557l184.941421-184.941422q60.339779-60.339779 120.679558 0Z" fill="#666666" p-id="13437"></path><path d="M557.653333 256l211.2 213.333333-302.08 298.666667H346.88l-151.466667-151.466667L557.653333 256m0-85.333333a85.333333 85.333333 0 0 0-60.586666 24.746666L135.253333 554.666667a85.333333 85.333333 0 0 0 0 120.746666L311.466667 853.333333h190.293333l327.253333-327.253333a85.333333 85.333333 0 0 0 0-120.746667l-211.2-211.2A85.333333 85.333333 0 0 0 557.653333 170.666667z" fill="#666666" p-id="13438"></path><path d="M332.8 768m42.666667 0l469.333333 0q42.666667 0 42.666667 42.666667l0 0q0 42.666667-42.666667 42.666666l-469.333333 0q-42.666667 0-42.666667-42.666666l0 0q0-42.666667 42.666667-42.666667Z" p-id="13439"></path></svg>,
+    draw: <svg viewBox="0 0 1028 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="14504" width="200" height="200"><path d="M871.876278 32.947837a67.103539 67.103539 0 0 0-106.224902-9.394495l-617.352556 617.352556 239.291219 236.271559 616.815728-616.882831a60.393185 60.393185 0 0 0-1.946003-96.830406z m-767.597379 652.917432l-51.871035 143.869987 146.755439 143.802883 140.917431-48.91848zM24.224377 893.483617L0.469725 1024l133.468938-17.849541z" p-id="14505"></path></svg>,
 }
 const svgIcon = (name = 'arrow', fontSize = '14px') => {
-    return <i style={{
-        '--fontSize': fontSize,
-        fill: "currentColor"
-    }} class={'text-$fontSize w-1em h-1em flex-center'}>
-        {svgMap[name]}
-    </i>
+    return h(defineComponent(() => {
+        return () => <i style={{
+            '--fontSize': fontSize,
+            fill: "currentColor"
+        }} class={'text-$fontSize w-1em h-1em flex-center'}>
+            {svgMap[name]}
+        </i>
+    }))
 }
 export default defineComponent<{
     // pdf文件路径
@@ -45,17 +52,76 @@ export default defineComponent<{
         { title: '图片', icon: 'image', render: () => renderThumbnailList() },
     ])
     const currentDrauu = shallowRef<ReturnType<typeof useDrauu>>(useDrauu(document.createElement('svg')) as any)
+    const currentDrauuOptopns = ref<any>({
+        mode: 'draw',
+    })
     type DrauuToolsType = {
         title: string
         icon: string
-        action(data: DrauuToolsType): void
+        action?(data: DrauuToolsType): void
         options?: any
+        nDropdownProps?: Record<string, any>
     }
     const isOpenDrauu = ref(true)
-    const drauuTools = ref<DrauuToolsType[]>([
+    const handwritingModelOptions = ref([
         {
-            title: '手写模式', icon: 'handwriting', action: () => {
-                isOpenDrauu.value = isOpenDrauu.value ? false : true
+            label: () => <span class="flex-center-start gap-15px">
+                {svgIcon('draw')}
+                <span>绘制</span>
+            </span>,
+            value: 'draw',
+            iconName: 'draw'
+        },
+        {
+            label: () => <span class="flex-center-start gap-15px">
+                {svgIcon('handwriting')}
+                <span>手写笔</span>
+            </span>,
+            value: 'stylus',
+            iconName: 'handwriting'
+        },
+        {
+            label: () => <span class="flex-center-start gap-15px">
+                {svgIcon('line')}
+                <span>画线</span>
+            </span>,
+            value: 'line',
+            iconName: 'line'
+        },
+        {
+            label: () => <span class="flex-center-start gap-15px">
+                {svgIcon('rectangle')}
+                <span>矩形</span>
+            </span>,
+            value: 'rectangle',
+            iconName: 'rectangle'
+        },
+        {
+            label: () => <span class="flex-center-start gap-15px">
+                {svgIcon('ellipse')}
+                <span>椭圆</span>
+            </span>,
+            value: 'ellipse',
+            iconName: 'ellipse'
+        },
+        {
+            label: () => <span class="flex-center-start gap-15px">
+                {svgIcon('eraseLine')}
+                <span>橡皮擦</span>
+            </span>,
+            value: 'eraseLine',
+            iconName: 'eraseLine'
+        },
+    ])
+    const handwritingModelIcon = computed(() => handwritingModelOptions.value.find(v => v.value === currentDrauuOptopns.value.mode)?.iconName || 'draw')
+    const drauuTools = computed<DrauuToolsType[]>(() => [
+        {
+            title: '手写模式', icon: handwritingModelIcon.value,
+            options: handwritingModelOptions.value,
+            nDropdownProps: {
+                onSelect(e: any, option: any) {
+                    currentDrauuOptopns.value.mode = option.value
+                }
             }
         },
         {
@@ -64,9 +130,6 @@ export default defineComponent<{
             }
         },
     ])
-    const aa = () => {
-        console.log(currentDrauu.value.clear())
-    }
     const render = async (canvas: HTMLCanvasElement, pageIndex: number) => {
         const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
         const page = await pdf.value.getPage(pageIndex + 1)
@@ -168,7 +231,16 @@ export default defineComponent<{
     const renderCanvas = (_: any, k: number) => {
         return defineComponent(() => {
             const svgDrauu = ref()
-            const drauu = useDrauu(svgDrauu)
+            const drauu = useDrauu(svgDrauu, {
+                brush: {
+                    mode: currentDrauuOptopns.value.mode,
+                    color: 'red',
+                    size: 3,
+                }
+            })
+            watch(currentDrauuOptopns, (val) => {
+                drauu.brush.value.mode = val.mode
+            }, { immediate: true, deep: true })
             const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
             const src = ref<any>(null)
             const { width: boxw, height: boxh } = useElementSize(container)
@@ -313,10 +385,15 @@ export default defineComponent<{
         }
         return drauuTools.value.map((item, k) => {
             return <div onClick={() => item.action?.(item)}
-                class={`w-30px h-30px p-x-10px flex-center cursor-pointer hover:text-#82a7f4 b-1px b-#e8e8e8 b-r-dashed ${classMap?.[item.icon]?.value} ${k === 0 ? ' b-l-solid ' : ''}`}
+                class={`w-30px h-30px p-x-10px flex-center cursor-pointer of-hidden hover:text-#82a7f4 b-1px b-#e8e8e8 b-r-dashed ${classMap?.[item.icon]?.value} ${k === 0 ? ' b-l-solid ' : ''}`}
             >
-                {item.options ? <NDropdown trigger="hover" options={item.options}>
-                    {svgIcon(item.icon)}
+                {item.options ? <NDropdown
+                    trigger="click"
+                    placement='top'
+                    options={item.options}
+                    {...item.nDropdownProps}
+                >
+                    <span>{svgIcon(item.icon)}</span>
                 </NDropdown> : svgIcon(item.icon)}
             </div>
         })
