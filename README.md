@@ -1,10 +1,10 @@
-# pdf-reader
+# @zys/pdf-reader
 
 vue3 编写的 pdf 阅读器
 
 ## 安装
 ```bash
-pnpm install pdf-reader
+pnpm install @zys/pdf-reader
 ```
 
 ## 使用
@@ -16,9 +16,9 @@ pnpm install pdf-reader
     </div>
 </template>
 <script setup lang="ts">
-import "pdf-reader/style.css"
-import pdfReader, { GlobalWorkerOptions } from "pdf-reader"
-import workerUrl from "pdf-reader/pdf.worker.mjs?url"
+import "@zys/pdf-reader/style.css"
+import pdfReader, { GlobalWorkerOptions } from "@zys/pdf-reader"
+import workerUrl from "@zys/pdf-reader/pdf.worker.mjs?url"
 import pdf from "./test1.pdf?url"
 GlobalWorkerOptions.workerSrc = workerUrl
 </script>
@@ -26,3 +26,27 @@ GlobalWorkerOptions.workerSrc = workerUrl
 .App {}
 </style>
 ```
+
+## 功能
+｜功能｜状态｜说明｜
+｜------｜-------｜-------｜
+｜缩放｜✅｜-｜
+｜翻页｜✅｜-｜
+｜横竖屏｜✅｜-｜
+｜缩略图｜☑️｜待完善，按需加载｜
+｜大纲｜✅｜-｜
+｜批注｜✅｜-｜
+
+## 批注功能
+｜功能｜状态｜说明｜
+｜------｜-------｜-------｜
+｜清空｜✅｜-｜
+｜撤回｜✅｜-｜
+｜笔的粗细｜✅｜-｜
+｜笔的模式｜✅｜-｜
+｜是否开启批注｜✅｜默认开启｜
+
+## 兼容性
+- 支持 IE11+
+- 支持移动端
+- 向下兼容到 chrome 87+ （已经校验， 其他版本自行校验）

@@ -1,6 +1,13 @@
 {
   "name": "@zys/pdf-reader",
   "version": "0.0.1",
+  "description": "pdf reader",
+  "keywords": [
+    "pdf",
+    "reader"
+  ],
+  "author": "zys8119",
+  "repository": "https://github.com/zys8119/pdf-reader.git",
   "type": "module",
   "exports": {
     ".": {
