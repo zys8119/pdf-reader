@@ -60,6 +60,7 @@ export default defineComponent<{
     const currentDrauuOptopns = ref<any>({
         mode: 'draw',
         color: '#000',
+        size: 3
     })
     const isOpenDrauu = ref(true)
     const handwritingModelOptions = ref([
@@ -128,6 +129,16 @@ export default defineComponent<{
     ].map(e => ({
         ...e, label: () => handwritingColorsLabelRender(e.value)
     })))
+    const handwritingSizeLabelRender = (size: any) => {
+        return <span>{size}</span>
+    }
+    const handwritingSizeOptions = ref(new Array(11).fill(0).map((e, k) => {
+        const value = k === 0 ? 3 : k * 20
+        return {
+            label: () => handwritingSizeLabelRender(value),
+            value
+        }
+    }))
     const handwritingModelIcon = computed(() => handwritingModelOptions.value.find(v => v.value === currentDrauuOptopns.value.mode)?.iconName || 'draw')
     type DrauuToolsType = {
         title: string
@@ -156,6 +167,19 @@ export default defineComponent<{
                 currentDrauu.value.redo()
             },
             className: !currentDrauu.value.canRedo.value ? 'opacity-30 text-32px' : 'text-32px'
+        },
+        {
+            title: '大小', icon: 'size',
+            options: handwritingSizeOptions.value,
+            render() {
+                return handwritingSizeLabelRender(currentDrauu.value.brush.value.size)
+            },
+            nDropdownProps: {
+                onSelect(e: any, option: any) {
+                    currentDrauuOptopns.value.size = option.value
+                }
+            },
+            className: 'text-32px'
         },
         {
             title: '颜色', icon: 'color',
@@ -288,9 +312,7 @@ export default defineComponent<{
     const renderCanvas = (_: any, k: number) => {
         return defineComponent(() => {
             const svgDrauu = ref()
-            const drauu = useDrauu(svgDrauu, {
-
-            })
+            const drauu = useDrauu(svgDrauu)
             const syncConfig = () => {
                 drauu.brush.value = {
                     ...drauu.brush.value,
