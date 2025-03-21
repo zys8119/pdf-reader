@@ -49,7 +49,7 @@ export default defineComponent<{
     // 当前页码
     currentPage: number
     // 批注
-    annotations: Record<string | number, string>
+    annotations: Record<string | number, string | undefined>
     currentDrauu: ReturnType<typeof useDrauu>
     currentDrauuOptopns: {
         mode: 'draw' | 'stylus' | 'line' | 'rectangle' | 'ellipse' | 'eraseLine'
@@ -65,11 +65,12 @@ export default defineComponent<{
     getThumbnailLists(): any
     prevPage(): void
     nextPage(): void
+    showTools: boolean
 }, {
     change: () => void
 }, string, {
 
-    }>((props, { expose, emit }) => {
+    }>((props, { expose, emit, slots }) => {
         register()
         const pdf = shallowRef<PDFDocumentProxy>() as Ref<PDFDocumentProxy>
         const numPages = ref(0)
@@ -556,17 +557,20 @@ export default defineComponent<{
                         </div >
                     </div>
                 </div>
-                <div class="flex-center select-none tool-panel">
-                    <div class='w-40px h-40px flex-center hover:bg-#e8e8e8 cursor-pointer hover:text-#82a7f4 text-18px' onClick={() => showOutline.value = !showOutline.value}>{svgIcon('menu')}</div>
-                    <div class="flex-center flex-1 gap-10px">
-                        <div class="p-x-10px flex-center hover:bg-#e8e8e8 cursor-pointer" onClick={() => updatePage(-1)}>上一页</div>
-                        <div class={'abs-r w-100px'}>
-                            <div class="swiper-pagination !top-50% !tr-y--50% !bottom-auto"></div>
+                {props.showTools ? slots.tool?.() || (
+                    <div class="flex-center select-none tool-panel">
+                        <div class='w-40px h-40px flex-center hover:bg-#e8e8e8 cursor-pointer hover:text-#82a7f4 text-18px' onClick={() => showOutline.value = !showOutline.value}>{svgIcon('menu')}</div>
+                        <div class="flex-center flex-1 gap-10px">
+                            <div class="p-x-10px flex-center hover:bg-#e8e8e8 cursor-pointer" onClick={() => updatePage(-1)}>上一页</div>
+                            <div class={'abs-r w-100px'}>
+                                <div class="swiper-pagination !top-50% !tr-y--50% !bottom-auto"></div>
+                            </div>
+                            <div class="p-x-10px flex-center hover:bg-#e8e8e8 cursor-pointer" onClick={() => updatePage(1)}>下一页</div>
                         </div>
-                        <div class="p-x-10px flex-center hover:bg-#e8e8e8 cursor-pointer" onClick={() => updatePage(1)}>下一页</div>
+                        {renderDrauuTools()}
                     </div>
-                    {renderDrauuTools()}
-                </div>
+                ) : null}
+
             </div>
         </>)
     }, {
@@ -579,6 +583,10 @@ export default defineComponent<{
             fixedOutline: {
                 type: Boolean,
                 default: false
+            },
+            showTools: {
+                type: Boolean,
+                default: true
             },
         } as any,
         inheritAttrs: false

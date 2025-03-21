@@ -26,6 +26,49 @@ GlobalWorkerOptions.workerSrc = workerUrl
 .App {}
 </style>
 ```
+## API
+
+### Props
+
+| 属性名              | 类型                  | 说明                                 |
+|---------------------|-----------------------|--------------------------------------|
+| src                 | string                | pdf地址                              |
+| vertical            | boolean               | 是否垂直模式                         |
+| fixedOutline        | boolean               | 是否固定大纲                         |
+| swiper              | Swiper                | SwiperJs                             |
+| swiperOptopns       | SwiperJsOptions       | SwiperJsOptions                      |
+| outline             | any[]                 | 大纲                                 |
+| numPages            | number                | 总页数                               |
+| currentPage         | number                | 当前页码                             |
+| annotations         | Record<string         | number, string                       |
+| currentDrauu        | Drauu                 | -                                    |
+| currentDrauuOptopns | `CurrentDrauuOptopns` | -                                    |
+| container           | HTMLDivElement        | -                                    |
+| showOutline         | boolean               | 是否显示大纲                         |
+| isShowThumbnailList | boolean               | 是否显示缩略图                       |
+| isOpenDrauu         | boolean               | 是否开启批注                         |
+| pdf                 | PDFDocumentProxy      | pdf文档代理或实例                    |
+| thumbnailLists      | any[]                 | 缩略图列表                           |
+| getThumbnailLists   | `()=>any`             | 获取缩略图列表。默认不执行，还未实现 |
+| prevPage            | `()=>void`            | 切换上一页                           |
+| nextPage            | `()=>void`            | 切换下一页                           |
+| showTools           | boolean               | 是否显示地步操作工具页               |
+### Events
+| 事件名 | 说明                 |
+|--------|----------------------|
+| change | 当前页码生命周期回调 |
+### 插槽
+| 名称 | 类型或参数 | 说明 |
+|------|------------|------|
+| tool | -          | -    |
+
+### CurrentDrauuOptopns
+
+| 属性名 | 类型                                                                    | 说明 |
+|--------|-------------------------------------------------------------------------|------|
+| mode   | 'draw' 、 'stylus' 、 'line' 、 'rectangle' 、 'ellipse' 、 'eraseLine' | 模式 |
+| color  | number                                                                  | 颜色 |
+| size   | number                                                                  | 粗细 |
 
 ## 功能
 
