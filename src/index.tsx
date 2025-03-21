@@ -277,9 +277,7 @@ export default defineComponent<{
     const renderCanvas = (_: any, k: number) => {
         return defineComponent(() => {
             const svgDrauu = ref()
-            const drauu = useDrauu(svgDrauu, {
-                brush: currentDrauuOptopns.value
-            })
+            const drauu = useDrauu(svgDrauu)
             watch(currentDrauuOptopns, (val) => {
                 drauu.brush.value = {
                     ...drauu.brush.value,
