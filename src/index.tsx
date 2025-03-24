@@ -359,6 +359,11 @@ export default defineComponent<{
 
         const renderCanvas = (_: any, k: number) => {
             return defineComponent(() => {
+                const viewport = shallowRef<any>({
+                    width: 0,
+                    height: 0,
+                    scale: 1
+                })
                 const svgDrauu = ref()
                 const drauu = useDrauu(svgDrauu)
                 const syncConfig = () => {
@@ -379,6 +384,37 @@ export default defineComponent<{
                         annotations.value[k] = drauu.dump()
                     }).off
                     emit('change')
+                    // 文字模式
+                    const _appendNode = drauu.drauuInstance.value?._appendNode;
+                    (drauu.drauuInstance.value as any)['_appendNode'] = async function (node: any) {
+                        if (node === true) {
+                            const el: any = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+                            el.setAttribute('x', '100')
+                            el.setAttribute('y', '300')
+                            el.setAttribute('fill', '#f00')
+                            el.setAttribute('font-size', '100')
+                            el.innerHTML = "撒打算大"
+                            el.getTotalLength = () => (100 + 100 * 4) * viewport.value.scale
+                            el.getPointAtLength = (n: number) => {
+                                return {
+                                    x: n * (100 + 100 * 4) * viewport.value.scale,
+                                    y: n * (300 + 100) * viewport.value.scale,
+                                }
+                            }
+                            _appendNode?.call(this, el as any)
+                            this.commit({
+                                undo: () => this._removeNode(el),
+                                redo: () => this._restoreNode(el),
+                            })
+                            this.drawing = false
+                            this._emitter.emit('end')
+                            this._emitter.emit('changed')
+                            this._originalPointerId = null
+                        } else {
+                            _appendNode?.call(this, node)
+                        }
+                    }
+                    drauu.drauuInstance.value?._appendNode(true as any)
                 }
                 watch(currentDrauuOptopns, syncConfig, { immediate: true, deep: true })
                 const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
@@ -389,10 +425,6 @@ export default defineComponent<{
                     const w = boxw.value / cw.value
                     const h = boxh.value / ch.value
                     return Math.min(w, h)
-                })
-                const viewport = shallowRef<any>({
-                    width: 0,
-                    height: 0,
                 })
                 useCssVars(() => ({
                     scale: scale.value,
