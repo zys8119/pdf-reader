@@ -95,14 +95,14 @@ export default defineComponent<{
         const isDrauuTextMode = computed(() => currentDrauuOptopns.value.mode === 'text')
         const isOpenDrauu = ref(true)
         const handwritingModelOptions = ref([
-            {
-                label: () => <span class="flex-center-start gap-15px">
-                    {svgIcon('text')}
-                    <span>文字</span>
-                </span>,
-                value: 'text',
-                iconName: 'text',
-            },
+            // {
+            //     label: () => <span class="flex-center-start gap-15px">
+            //         {svgIcon('text')}
+            //         <span>文字</span>
+            //     </span>,
+            //     value: 'text',
+            //     iconName: 'text',
+            // },
             {
                 label: () => <span class="flex-center-start gap-15px">
                     {svgIcon('draw')}
