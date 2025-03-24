@@ -364,6 +364,15 @@ export default defineComponent<{
                     height: 0,
                     scale: 1
                 })
+                const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
+                const src = ref<any>(null)
+                const { width: boxw, height: boxh } = useElementSize(container)
+                const { width: cw, height: ch } = useElementSize(elBox)
+                const scale = computed(() => {
+                    const w = boxw.value / cw.value
+                    const h = boxh.value / ch.value
+                    return Math.min(w, h)
+                })
                 const svgDrauu = ref()
                 const drauu = useDrauu(svgDrauu)
                 const syncConfig = () => {
@@ -372,33 +381,22 @@ export default defineComponent<{
                         ...omit(currentDrauuOptopns.value, isDrauuTextMode.value ? ['mode'] : [])
                     }
                 }
-                let off = () => { }
-                const init = async () => {
-                    syncConfig()
-                    // 清除之前的事件
-                    off()
-                    // 回显数据
-                    drauu.load(annotations.value[k] || '')
-                    off = drauu.onChanged(() => {
-                        // 储存数据
-                        annotations.value[k] = drauu.dump()
-                    }).off
-                    emit('change')
+                const createText = ({ x, y }: { x: number, y: number }) => {
                     // 文字模式
                     const _appendNode = drauu.drauuInstance.value?._appendNode;
                     (drauu.drauuInstance.value as any)['_appendNode'] = async function (node: any) {
                         if (node === true) {
                             const el: any = document.createElementNS('http://www.w3.org/2000/svg', 'text')
-                            el.setAttribute('x', '100')
-                            el.setAttribute('y', '300')
+                            el.setAttribute('x', x)
+                            el.setAttribute('y', y)
                             el.setAttribute('fill', '#f00')
                             el.setAttribute('font-size', '100')
-                            el.innerHTML = "撒打算大"
-                            el.getTotalLength = () => (100 + 100 * 4) * viewport.value.scale
+                            el.innerHTML = "测试文字"
+                            el.getTotalLength = () => (x + 100 * 4) * viewport.value.scale
                             el.getPointAtLength = (n: number) => {
                                 return {
-                                    x: n * (100 + 100 * 4) * viewport.value.scale,
-                                    y: n * (300 + 100) * viewport.value.scale,
+                                    x: n * (x + 100 * 4) * viewport.value.scale,
+                                    y: n * (y + 100) * viewport.value.scale,
                                 }
                             }
                             _appendNode?.call(this, el as any)
@@ -416,16 +414,25 @@ export default defineComponent<{
                     }
                     drauu.drauuInstance.value?._appendNode(true as any)
                 }
+                const textClick = (e: any) => {
+                    createText((drauu.drauuInstance.value)?.model.getMousePosition(e) || { x: 0, y: 0 })
+                }
+                let off = () => { }
+                const init = async () => {
+                    syncConfig()
+                    // 清除之前的事件
+                    off()
+                    // 回显数据
+                    drauu.load(annotations.value[k] || '')
+                    off = drauu.onChanged(() => {
+                        // 储存数据
+                        annotations.value[k] = drauu.dump()
+                    }).off
+                    emit('change')
+
+                }
                 watch(currentDrauuOptopns, syncConfig, { immediate: true, deep: true })
-                const elBox = ref<HTMLDivElement>() as Ref<HTMLDivElement>
-                const src = ref<any>(null)
-                const { width: boxw, height: boxh } = useElementSize(container)
-                const { width: cw, height: ch } = useElementSize(elBox)
-                const scale = computed(() => {
-                    const w = boxw.value / cw.value
-                    const h = boxh.value / ch.value
-                    return Math.min(w, h)
-                })
+
                 useCssVars(() => ({
                     scale: scale.value,
                     width: viewport.value.wdith + 'px',
@@ -447,7 +454,8 @@ export default defineComponent<{
                     <div class="swiper-zoom-container  flex-center">
                         <div class="abs-r transform-scale-$scale w-$width h-$height" ref={elBox} >
                             <img class='img' alt="" src={src.value} />
-                            {isOpenDrauu.value && !isDrauuTextMode.value ? <svg class="abs-content" ref={svgDrauu}></svg> : null}
+                            {isOpenDrauu.value ? <svg class="abs-content" ref={svgDrauu}></svg> : null}
+                            {isDrauuTextMode.value ? <div class={'abs-content'} onClick={textClick}></div> : null}
                         </div>
                     </div>
                 </div>
