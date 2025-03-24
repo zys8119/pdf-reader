@@ -1,6 +1,6 @@
 <template>
     <div class='App abs-content flex flex-col'>
-        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline></pdfReader>
+        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline :swiperOptopns="swiperOptopns"></pdfReader>
     </div>
 </template>
 <script setup lang="ts">
@@ -12,7 +12,10 @@ import { onMounted, ref } from "vue"
 GlobalWorkerOptions.workerSrc = workerUrl
 
 const pdfReaderRef = ref<InstanceType<typeof pdfReader>>()
-
+const swiperOptopns = ref<any>({
+    speed: 300,
+    allowTouchMove: true,
+})
 </script>
 <style scoped lang="less">
 .App {

@@ -647,6 +647,10 @@ export default defineComponent<{
                 type: Boolean,
                 default: true
             },
+            swiperOptopns: {
+                type: Object,
+                default: () => ({})
+            },
         } as any,
         inheritAttrs: false
     })
