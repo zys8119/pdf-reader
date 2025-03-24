@@ -1,6 +1,6 @@
 <template>
     <div class='App abs-content flex flex-col'>
-        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline @change="change"></pdfReader>
+        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline></pdfReader>
     </div>
 </template>
 <script setup lang="ts">
@@ -13,9 +13,6 @@ GlobalWorkerOptions.workerSrc = workerUrl
 
 const pdfReaderRef = ref<InstanceType<typeof pdfReader>>()
 
-const change = () => {
-    console.log(pdfReaderRef.value)
-}
 </script>
 <style scoped lang="less">
 .App {
