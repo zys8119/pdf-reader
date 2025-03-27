@@ -93,7 +93,7 @@ export default defineComponent<{
             size: 3
         })
         const isDrauuTextMode = computed(() => currentDrauuOptopns.value.mode === 'text')
-        const isOpenDrauu = ref(true)
+        const isOpenDrauu = ref(false)
         const handwritingModelOptions = ref([
             // {
             //     label: () => <span class="flex-center-start gap-15px">
