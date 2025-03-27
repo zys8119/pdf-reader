@@ -60,7 +60,7 @@ export default defineComponent<{
     container?: HTMLDivElement
     showOutline?: boolean
     isShowThumbnailList?: boolean
-    isOpenDrauu?: boolean
+    isOpenDrauu: boolean
     pdf?: PDFDocumentProxy
     thumbnailLists?: any[]
     getThumbnailLists?(): any
@@ -68,7 +68,8 @@ export default defineComponent<{
     nextPage?(): void
     showTools?: boolean
 }, {
-    change: () => void
+    change: () => void,
+    'update:isOpenDrauu': (isOpenDrauu: boolean) => void
 }, string, {
 
     }>((props, { expose, emit, slots }) => {
@@ -93,7 +94,7 @@ export default defineComponent<{
             size: 3
         })
         const isDrauuTextMode = computed(() => currentDrauuOptopns.value.mode === 'text')
-        const isOpenDrauu = ref(false)
+        const { isOpenDrauu } = useVModels(props, emit)
         const handwritingModelOptions = ref([
             // {
             //     label: () => <span class="flex-center-start gap-15px">
@@ -650,6 +651,10 @@ export default defineComponent<{
             swiperOptopns: {
                 type: Object,
                 default: () => ({})
+            },
+            isOpenDrauu: {
+                type: Boolean,
+                default: false
             },
         } as any,
         inheritAttrs: false
