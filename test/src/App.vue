@@ -1,6 +1,7 @@
 <template>
     <div class='App abs-content flex flex-col'>
-        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline :swiperOptopns="swiperOptopns"></pdfReader>
+        <pdfReader ref="pdfReaderRef" :src="pdf" v-model:isOpenDrauu="isOpenDrauu" fixedOutline
+            :swiperOptopns="swiperOptopns"></pdfReader>
     </div>
 </template>
 <script setup lang="ts">
@@ -10,7 +11,7 @@ import workerUrl from "pdf-reader/pdf.worker.mjs?url"
 import pdf from "./test1.pdf?url"
 import { onMounted, watch, ref } from "vue"
 GlobalWorkerOptions.workerSrc = workerUrl
-
+const isOpenDrauu = ref(false)
 const pdfReaderRef = ref<InstanceType<typeof pdfReader>>()
 const swiperOptopns = ref<any>({
     // speed: 300,

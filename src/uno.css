@@ -37,11 +37,10 @@
 .container{max-width:1536px;}
 }
 /* layer: default */
-.pointer-events-none{pointer-events:none;}
-.pointer-events-initial{pointer-events:initial;}
 .absolute{position:absolute;}
 .\!bottom-auto{bottom:auto !important;}
 .\!top-50\%{top:50% !important;}
+.z-\$ZIndex{z-index:var(--ZIndex);}
 .z-2{z-index:2;}
 .m-4\.145013{margin:1.03625325rem;}
 .m-76\.580384{margin:19.145096rem;}
