@@ -422,8 +422,11 @@ export default defineComponent<{
         }
         const highlightText = () => {
             const rect = textSelectStateRect.value.toJSON()
-            const mode = currentDrauu.value.brush.value.mode
+            const brush = { ...currentDrauu.value.brush.value }
             currentDrauu.value.brush.value.mode = 'rectangle'
+            currentDrauu.value.brush.value.fill = 'rgba(255,0,0,0.3)'
+            currentDrauu.value.brush.value.color = 'rgba(0,0,0,0)'
+            currentDrauu.value.brush.value.size = 0
             const startEvent = new PointerEvent('pointerdown', {
                 clientX: rect.left,
                 clientY: rect.top,
@@ -431,13 +434,14 @@ export default defineComponent<{
             });
             const endEvent = new PointerEvent('pointerdown', {
                 clientX: rect.left + rect.width,
-                clientY: rect.top + rect.width,
+                clientY: rect.top + rect.height,
                 pressure: 1
             });
             const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any)
             rectModel.eventDown(startEvent)
             rectModel.eventMove(endEvent)
             rectModel.eventUp(endEvent)
+            currentDrauu.value.brush.value = brush
         }
         const id = 'selectionchange-pdf-copy-btn'
         document.getElementById(id)?.remove()
