@@ -254,18 +254,18 @@ export default defineComponent<{
             },
             {
                 title: '是否开启手写面板', icon: 'eye', action: () => {
-                    isOpenDrauu.value = isOpenDrauu.value ? false : true
+                    isOpenDrauu.value = !isOpenDrauu.value ? false : true
                 },
                 className: 'text-25px'
             },
         ])
+
         const render = async (canvas: HTMLCanvasElement, pageIndex: number) => {
             const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
             const page = await pdf.value.getPage(pageIndex + 1)
             const viewport = page.getViewport({ scale: 5 })
             canvas.height = viewport.height
             canvas.width = viewport.width
-
             await page.render({
                 viewport,
                 canvasContext: ctx
@@ -273,8 +273,29 @@ export default defineComponent<{
             const src = canvas.toDataURL()
             canvas.remove()
             return {
+                page,
                 src,
-                viewport
+                viewport,
+                getTextRect(item: any) {
+                    const [a, b, c, d, e, f] = item.transform;
+                    const x = e; // X 位置
+                    const y = f + d - c; // PDF 坐标系转换
+                    const scale = viewport.scale
+                    return {
+                        item,
+                        text: item.str,
+                        x: x * scale,
+                        y: viewport.height - y * scale,
+                        // 所有文字的总宽度
+                        width: item.width * scale,
+                        // 所有文字的总高度
+                        height: item.height * scale,
+                        // 单个宽度
+                        textWidth: a * scale,
+                        // 单个高度
+                        textHeight: a * scale,
+                    }
+                }
             }
         }
         /**
@@ -439,24 +460,55 @@ export default defineComponent<{
                     width: viewport.value.wdith + 'px',
                     height: viewport.value.height + 'px',
                 }) as any)
+                type TextItem = {
+                    item: any,
+                    text: string,
+                    x: number,
+                    y: number,
+                    // 所有文字的总宽度
+                    width: number,
+                    // 所有文字的总高度
+                    height: number,
+                    // 单个宽度
+                    textWidth: number,
+                    // 单个高度
+                    textHeight: number,
+                }
+                const textItems = ref<Array<TextItem>>([])
                 onMounted(async () => {
-                    const res = await render(document.createElement('canvas'), k)
-                    viewport.value = res.viewport
-                    src.value = res.src
+                    const { viewport: _viewport, src: _src, page, getTextRect } = await render(document.createElement('canvas'), k)
+                    viewport.value = _viewport
+                    src.value = _src
                     watch(currentPage, () => {
                         if (k === currentPage.value) {
                             currentDrauu.value = drauu
                             init()
                         }
                     }, { immediate: true })
+                    textItems.value = (await page.getTextContent()).items.map((item: any) => getTextRect(item))
                 })
-
+                const renderTextItem = (item: TextItem) => {
+                    const total = item.text.length
+                    return new Array(total).fill(0).map((e, k) => {
+                        const text = item.text.slice(k, k + 1)
+                        return <div key={k} class="text-100px abs bg-#f00 of-hidden" style={{
+                            left: `${item.x + k * item.textWidth}px`,
+                            top: `${item.y}px`,
+                            width: `${item.textWidth}px`,
+                            height: `${item.textHeight}px`,
+                        }}>{text}</div>
+                    })
+                }
+                const renderTextItems = () => <div class={'abs-content'}>
+                    {textItems.value.map((item) => renderTextItem(item))}
+                </div>
                 return () => <div class="swiper-slide flex-center">
                     <div class="swiper-zoom-container  flex-center">
                         <div class="abs-r transform-scale-$scale w-$width h-$height" ref={elBox} >
                             <img class='img' alt="" src={src.value} />
                             {isOpenDrauu.value ? <svg class="abs-content" ref={svgDrauu}></svg> : null}
                             {isDrauuTextMode.value ? <div class={'abs-content'} onClick={textClick}></div> : null}
+                            {renderTextItems()}
                         </div>
                     </div>
                 </div>
