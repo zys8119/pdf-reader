@@ -33,6 +33,7 @@ const svgIcon = (name = 'arrow', fontSize = '14px') => {
         </i>
     }))
 }
+
 export default defineComponent<{
     // pdf文件路径
     src: string,
@@ -377,8 +378,14 @@ export default defineComponent<{
             // 缩略图渲染
             // getThumbnailLists()
         })
+        const { copy } = useClipboard()
+        const copyText = async () => {
+            await copy(window.getSelection()?.toString() as any || '')
+        }
+        const id = 'selectionchange-pdf-copy-btn'
+        document.getElementById(id)?.remove()
         const copyBtn = document.createElement("button");
-        copyBtn.innerText = "复制";
+        copyBtn.id = id
         copyBtn.style.position = "absolute";
         copyBtn.style.display = "none"; // 默认隐藏
         copyBtn.style.zIndex = "1000";
@@ -388,17 +395,18 @@ export default defineComponent<{
         copyBtn.style.borderRadius = "5px";
         copyBtn.style.border = "none";
         copyBtn.style.cursor = "pointer";
+        createApp(() => <div class='flex-center'>
+            <div onClick={copyText}>复制</div>
+        </div>).mount(copyBtn)
         document.body.appendChild(copyBtn);
         function showCopyButton(selection: any) {
             const range = selection.getRangeAt(0);
             const rect = range.getBoundingClientRect(); // 获取选中文字的位置
-            console.log(range, rect)
             copyBtn.style.left = `${rect.left + window.scrollX}px`;
             copyBtn.style.top = `${rect.top + window.scrollY - 30}px`;
             copyBtn.style.display = "block";
 
             copyBtn.onclick = () => {
-                // copyToClipboard(selection.toString());
                 hideCopyButton();
             };
         }
