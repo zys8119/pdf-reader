@@ -603,14 +603,24 @@ export default defineComponent<{
                 const renderTextItems = () => <div class="abs-content z-2">
                     {textItems.value.map((item) => renderTextItem(item))}
                 </div>
+                const img = ref<HTMLImageElement>() as Ref<HTMLImageElement>
+                const imgStyle = ref('')
+                useMutationObserver(img, () => {
+                    imgStyle.value = img.value.getAttribute('style') as string
+                }, {
+                    attributes: true,
+                    attributeFilter: ['style']
+                })
                 return () => <div class="swiper-slide flex-center">
                     <div class="swiper-zoom-container  flex-center">
                         <div class="abs-r transform-scale-$scale w-$width h-$height" ref={elBox} >
-                            <img class='img' alt="" src={src.value} />
-                            <svg style={{
-                                '--ZIndex': ZIndex.value
-                            }} class="abs-content z-$ZIndex" ref={svgDrauu}></svg>
-                            {renderTextItems()}
+                            <img class='img' ref={img} alt="" src={src.value} />
+                            <div class="abs-content" style={imgStyle.value}>
+                                <svg style={{
+                                    '--ZIndex': ZIndex.value
+                                }} class="abs-content z-$ZIndex" ref={svgDrauu}></svg>
+                                {renderTextItems()}
+                            </div>
                             {/* {isDrauuTextMode.value ? <div class={'abs-content'} onClick={textClick}></div> : null} */}
                         </div>
                     </div>
