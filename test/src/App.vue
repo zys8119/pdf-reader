@@ -1,6 +1,6 @@
 <template>
     <div class='App abs-content flex flex-col'>
-        <pdfReader ref="pdfReaderRef" :src="pdf" isOpenDrauu fixedOutline :swiperOptopns="swiperOptopns"></pdfReader>
+        <pdfReader ref="pdfReaderRef" :src="pdf" fixedOutline :swiperOptopns="swiperOptopns"></pdfReader>
     </div>
 </template>
 <script setup lang="ts">
@@ -13,8 +13,11 @@ GlobalWorkerOptions.workerSrc = workerUrl
 
 const pdfReaderRef = ref<InstanceType<typeof pdfReader>>()
 const swiperOptopns = ref<any>({
-    speed: 300,
-    allowTouchMove: true,
+    // speed: 300,
+    // allowTouchMove: true,
+    zoom: {
+        toggle: true
+    }
 })
 watch(() => pdfReaderRef.value?.swiper, () => {
     if (pdfReaderRef.value) {

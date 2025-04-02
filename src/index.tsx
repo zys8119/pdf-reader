@@ -377,8 +377,50 @@ export default defineComponent<{
             // 缩略图渲染
             // getThumbnailLists()
         })
+        const copyBtn = document.createElement("button");
+        copyBtn.innerText = "复制";
+        copyBtn.style.position = "absolute";
+        copyBtn.style.display = "none"; // 默认隐藏
+        copyBtn.style.zIndex = "1000";
+        copyBtn.style.padding = "5px 10px";
+        copyBtn.style.background = "black";
+        copyBtn.style.color = "white";
+        copyBtn.style.borderRadius = "5px";
+        copyBtn.style.border = "none";
+        copyBtn.style.cursor = "pointer";
+        document.body.appendChild(copyBtn);
+        function showCopyButton(selection: any) {
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect(); // 获取选中文字的位置
+            console.log(range, rect)
+            copyBtn.style.left = `${rect.left + window.scrollX}px`;
+            copyBtn.style.top = `${rect.top + window.scrollY - 30}px`;
+            copyBtn.style.display = "block";
 
-
+            copyBtn.onclick = () => {
+                // copyToClipboard(selection.toString());
+                hideCopyButton();
+            };
+        }
+        function hideCopyButton() {
+            copyBtn.style.display = "none";
+        }
+        document.addEventListener('selectionchange', (event) => {
+            event.preventDefault(); // 阻止默认选择行为
+            event.stopPropagation(); // 阻止事件冒泡
+            const selection = window.getSelection();
+            const selectedText = selection?.toString().trim();
+            if (selectedText && selection?.anchorNode?.parentElement?.closest(".pdf-text-layer")) {
+                // 显示
+                showCopyButton(selection)
+            } else {
+                // 关闭
+                hideCopyButton();
+            }
+        })
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault(); // 禁止右键菜单
+        });
         const renderCanvas = (_: any, k: number) => {
             return defineComponent(() => {
                 const viewport = shallowRef<any>({
@@ -491,24 +533,25 @@ export default defineComponent<{
                     const total = item.text.length
                     return new Array(total).fill(0).map((e, k) => {
                         const text = item.text.slice(k, k + 1)
-                        return <div key={k} class="text-100px abs bg-#f00 of-hidden" style={{
+                        return <div key={k} class="pdf-text-layer text-100px abs text-transparent of-hidden pointer-events-initial selection:text-transparent selection:bg-#0095ff selection:bg-op-30" style={{
                             left: `${item.x + k * item.textWidth}px`,
                             top: `${item.y}px`,
                             width: `${item.textWidth}px`,
                             height: `${item.textHeight}px`,
+                            fontSize: `${item.textHeight}px`,
                         }}>{text}</div>
                     })
                 }
-                const renderTextItems = () => <div class={'abs-content'}>
+                const renderTextItems = () => <div class="abs-content pointer-events-none">
                     {textItems.value.map((item) => renderTextItem(item))}
                 </div>
                 return () => <div class="swiper-slide flex-center">
                     <div class="swiper-zoom-container  flex-center">
                         <div class="abs-r transform-scale-$scale w-$width h-$height" ref={elBox} >
                             <img class='img' alt="" src={src.value} />
-                            {isOpenDrauu.value ? <svg class="abs-content" ref={svgDrauu}></svg> : null}
-                            {isDrauuTextMode.value ? <div class={'abs-content'} onClick={textClick}></div> : null}
                             {renderTextItems()}
+                            {isOpenDrauu.value ? <svg class="abs-content" ref={svgDrauu}></svg> : null}
+                            {/* {isDrauuTextMode.value ? <div class={'abs-content'} onClick={textClick}></div> : null} */}
                         </div>
                     </div>
                 </div>

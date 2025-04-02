@@ -37,6 +37,9 @@
 .container{max-width:1536px;}
 }
 /* layer: default */
+.pointer-events-none{pointer-events:none;}
+.pointer-events-initial{pointer-events:initial;}
+.absolute{position:absolute;}
 .\!bottom-auto{bottom:auto !important;}
 .\!top-50\%{top:50% !important;}
 .z-2{z-index:2;}
@@ -44,6 +47,7 @@
 .m-76\.580384{margin:19.145096rem;}
 .m-767\.597379{margin:191.89934475rem;}
 .m0{margin:0;}
+.block{display:block;}
 .\!w-5px{width:5px !important;}
 .h-\$height{height:var(--height);}
 .h-100\%{height:100%;}
@@ -88,12 +92,15 @@
 .b-r-solid{border-right-style:solid;}
 .bg-\#82a7f4{--un-bg-opacity:1;background-color:rgb(130 167 244 / var(--un-bg-opacity)) /* #82a7f4 */;}
 .bg-\#e8e8e8{--un-bg-opacity:1;background-color:rgb(232 232 232 / var(--un-bg-opacity)) /* #e8e8e8 */;}
-.bg-\#f00{--un-bg-opacity:1;background-color:rgb(255 0 0 / var(--un-bg-opacity)) /* #f00 */;}
 .bg-\#fff{--un-bg-opacity:1;background-color:rgb(255 255 255 / var(--un-bg-opacity)) /* #fff */;}
 .bg-\$color{background-color:var(--color) /* var(--color) */;}
+.selection\:bg-\#0095ff *::selection,
+.selection\:bg-\#0095ff::selection{--un-bg-opacity:1;background-color:rgb(0 149 255 / var(--un-bg-opacity)) /* #0095ff */;}
 .hover\:bg-\#e8e8e8:hover{--un-bg-opacity:1;background-color:rgb(232 232 232 / var(--un-bg-opacity)) /* #e8e8e8 */;}
 .hover\:bg-\#f0f0f0:hover{--un-bg-opacity:1;background-color:rgb(240 240 240 / var(--un-bg-opacity)) /* #f0f0f0 */;}
 .hover\:bg-\#fff:hover{--un-bg-opacity:1;background-color:rgb(255 255 255 / var(--un-bg-opacity)) /* #fff */;}
+.selection\:bg-op-30 *::selection,
+.selection\:bg-op-30::selection{--un-bg-opacity:0.3;}
 .p-10px{padding:10px;}
 .p-x-10px{padding-left:10px;padding-right:10px;}
 .p-x-15px{padding-left:15px;padding-right:15px;}
@@ -106,6 +113,9 @@
 .text-20px{font-size:20px;}
 .text-25px{font-size:25px;}
 .text-32px{font-size:32px;}
+.selection\:text-transparent *::selection,
+.selection\:text-transparent::selection,
+.text-transparent{color:transparent /* transparent */;}
 .text-\#007bff{--un-text-opacity:1;color:rgb(0 123 255 / var(--un-text-opacity)) /* #007bff */;}
 .text-\#82a7f4{--un-text-opacity:1;color:rgb(130 167 244 / var(--un-text-opacity)) /* #82a7f4 */;}
 .text-\$fontSize{color:var(--fontSize) /* var(--fontSize) */;}
