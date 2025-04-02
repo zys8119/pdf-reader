@@ -295,18 +295,6 @@ export default defineComponent<{
                 viewport,
                 canvasContext: ctx
             }).promise
-            const aa = {
-                "x": 453.2500305175781,
-                "y": 247.2045440673828,
-                "width": 67.72726440429688,
-                "height": 23.478775024414062,
-                "top": 247.2045440673828,
-                "right": 520.977294921875,
-                "bottom": 270.6833190917969,
-                "left": 453.2500305175781
-            }
-            ctx.fillStyle = '#ff08'
-            ctx.fillRect(aa.x * viewport.scale, aa.y * viewport.scale, aa.width * viewport.scale, aa.height * viewport.scale)
             const src = canvas.toDataURL()
             canvas.remove()
             return {
