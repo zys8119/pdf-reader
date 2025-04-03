@@ -495,16 +495,19 @@ export default defineComponent<{
         const getSelectTextItems = (els: Array<HTMLSpanElement>) => {
             return els.map(e => textItemsIdMap.value[e.getAttribute('data-id') as any]).filter(e => e)
         }
+        type ElsRectType = {
+            sx: number,
+            sy: number,
+            ex: number,
+            ey: number
+            width: number
+            height: number
+        }
         const getSelectTextRect = (callback: (path: SVGPathElement, data: {
             d: string
             els: Array<HTMLSpanElement>
             elsItem: Array<TextItem & { id: any }>
-            elsRect: Array<{
-                sx: number,
-                sy: number,
-                ex: number,
-                ey: number
-            }>
+            elsRect: Array<ElsRectType>
 
         }) => void) => {
             const rect = textSelectStateRect.value.toJSON()
@@ -525,24 +528,16 @@ export default defineComponent<{
             });
             const selectEls = getSelectionEls()
             const selectElsItem = getSelectTextItems(selectEls)
-            const elsRect: Array<{
-                sx: number,
-                sy: number,
-                ex: number,
-                ey: number
-            }> = Object.values(groupBy(selectElsItem, e => e.y)).map(e => {
+            const elsRect: Array<ElsRectType> = Object.values(groupBy(selectElsItem, e => e.y)).map(e => {
                 return {
                     sx: Math.min(...e.map(e => e.x)),
                     sy: Math.min(...e.map(e => e.y)),
                     ex: Math.max(...e.map(e => e.x + e.width)),
-                    ey: Math.max(...e.map(e => e.y + e.height))
+                    ey: Math.max(...e.map(e => e.y + e.height)),
+                    width: Math.max(...e.map(e => e.width)),
+                    height: Math.max(...e.map(e => e.height))
                 }
-            }) as Array<{
-                sx: number,
-                sy: number,
-                ex: number,
-                ey: number
-            }>
+            }) as Array<ElsRectType>
             const d = elsRect.map(e => `M ${e.sx} ${e.sy} L ${e.ex} ${e.sy} L ${e.ex} ${e.ey} L ${e.sx} ${e.ey} Z`).join(' ')
             const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, path => {
                 callback(path, {
@@ -558,6 +553,15 @@ export default defineComponent<{
         const highlightText = () => {
             getSelectTextRect((path, { d }) => {
                 path.setAttribute('fill', currentDrauu.value.brush.value.fill as any)
+                path.setAttribute('d', d)
+            })
+        }
+        const underlineText = () => {
+            getSelectTextRect((path, { elsRect }) => {
+                const offset = 10
+                const d = elsRect.map(e => `M ${e.sx} ${e.ey + offset} L ${e.ex} ${e.ey + offset} Z`).join(' ')
+                path.setAttribute('stroke', '#f00')
+                path.setAttribute('stroke-width', '4')
                 path.setAttribute('d', d)
             })
         }
@@ -577,6 +581,7 @@ export default defineComponent<{
         createApp(() => <div class='flex-center gap-15px'>
             <div onClick={copyText}>复制</div>
             <div onClick={highlightText}>高亮</div>
+            <div onClick={underlineText}>划线</div>
         </div>).mount(copyBtn)
         document.body.appendChild(copyBtn);
         function showCopyButton(selection: any) {
