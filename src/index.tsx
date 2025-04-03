@@ -6,15 +6,35 @@ import { createApp } from 'vue';
 import { NEllipsis, NDropdown } from 'naive-ui';
 import { useDrauu } from '@vueuse/integrations/useDrauu'
 import { merge, omit } from 'lodash'
-import { RectModel, Drauu } from 'drauu'
-class MyRectModel extends RectModel {
+import { Drauu, DrawModel } from 'drauu'
+const onEnd = DrawModel.prototype.onEnd
+DrawModel.prototype.onEnd = function () {
+    if (typeof (this.drauu as any).MyRectModelDrawRectEnd === 'function') {
+        const path = this.el
+        this.el = null
+        if (!path)
+            return false;
+        (this.drauu as any).MyRectModelDrawRectEnd(path)
+        return true
+    } else {
+        return onEnd.call(this)
+    }
+}
+class MyRectModel extends DrawModel {
     exec: any
-    constructor(drauu: Drauu | any) {
+    declare el: any
+    constructor(drauu: Drauu | any, public d: string) {
+
+        drauu.MyRectModelDrawRectEnd = (path: SVGPathElement) => {
+            this.drawRectEnd(path)
+        }
         drauu.exec = function (type: any, ev: any) {
+            if (typeof type === 'function') return type.call(this, ev)
             this[type](ev)
         }
         super(drauu)
-        this.exec = (point: PointerEvent, type: string) => drauu.exec(type, point)
+        this.exec = (point: PointerEvent, type: string | (() => void)) => drauu.exec(type, point)
+
     }
     eventDown(point: PointerEvent) {
         this.exec(point, 'eventStart')
@@ -24,6 +44,16 @@ class MyRectModel extends RectModel {
     }
     eventUp(point: PointerEvent) {
         this.exec(point, 'eventEnd')
+    }
+    drawRectEnd(path: SVGPathElement) {
+        path.setAttribute('d', this.d)
+    }
+    drawRect(point: PointerEvent, endEvent: PointerEvent) {
+        this.exec(point, function (this: any, point: PointerEvent) {
+            this.eventStart(point)
+            this.eventMove(endEvent)
+            this.eventEnd(endEvent)
+        })
     }
 }
 const svgMap: any = {
@@ -404,6 +434,12 @@ export default defineComponent<{
         })
         const textSelectState = useTextSelection()
         const textSelectStateRect = computed(() => textSelectState.rects.value[0])
+        const textSelectStateRectEl = computed(() => {
+            return {
+                start: textSelectState.ranges.value[0].startContainer.parentElement,
+                end: textSelectState.ranges.value[0].endContainer.parentElement,
+            }
+        })
         const { copy } = useClipboard()
         const copyText = async () => {
             await copy(textSelectState.text.value as any)
@@ -411,7 +447,7 @@ export default defineComponent<{
         const highlightText = () => {
             const rect = textSelectStateRect.value.toJSON()
             const brush = { ...currentDrauu.value.brush.value }
-            currentDrauu.value.brush.value.mode = 'rectangle'
+            currentDrauu.value.brush.value.mode = 'draw'
             currentDrauu.value.brush.value.fill = 'rgba(255,0,0,0.3)'
             currentDrauu.value.brush.value.color = 'rgba(0,0,0,0)'
             currentDrauu.value.brush.value.size = 0
@@ -425,10 +461,9 @@ export default defineComponent<{
                 clientY: rect.top + rect.height,
                 pressure: 1
             });
-            const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any)
-            rectModel.eventDown(startEvent)
-            rectModel.eventMove(endEvent)
-            rectModel.eventUp(endEvent)
+            console.log(textSelectStateRectEl.value)
+            const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, 'draw')
+            rectModel.drawRect(startEvent, endEvent)
             currentDrauu.value.brush.value = brush
         }
         const id = 'selectionchange-pdf-copy-btn'
