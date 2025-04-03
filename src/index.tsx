@@ -5,7 +5,7 @@ import { register } from 'swiper/element/bundle';
 import { createApp } from 'vue';
 import { NEllipsis, NDropdown } from 'naive-ui';
 import { useDrauu } from '@vueuse/integrations/useDrauu'
-import { merge, omit } from 'lodash'
+import { merge, omit, groupBy } from 'lodash'
 import { Drauu, DrawModel } from 'drauu'
 const onEnd = DrawModel.prototype.onEnd
 DrawModel.prototype.onEnd = function () {
@@ -504,7 +504,7 @@ export default defineComponent<{
             });
             const selectEls = getSelectionEls()
             const selectElsItem = getSelectTextItems(selectEls)
-            console.log(selectElsItem)
+            console.log(groupBy(selectElsItem, e => e.y))
             const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, 'M 0 0')
             rectModel.drawRect(startEvent, endEvent)
             currentDrauu.value.brush.value = brush
