@@ -601,9 +601,9 @@ export default defineComponent<{
         document.addEventListener('selectionchange', (event) => {
             event.preventDefault(); // 阻止默认选择行为
             event.stopPropagation(); // 阻止事件冒泡
-            const selection = window.getSelection();
+            const selection = window.getSelection() as any;
             const selectedText = selection?.toString().trim();
-            if (selectedText && selection?.anchorNode?.parentElement?.closest(".pdf-text-layer")) {
+            if (selectedText.length > 0 && selection?.anchorNode?.parentElement?.closest(".pdf-text-layer")) {
                 // 显示
                 showCopyButton(selection)
             } else {
