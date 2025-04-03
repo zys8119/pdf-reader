@@ -83,6 +83,20 @@ const svgIcon = (name = 'arrow', fontSize = '14px') => {
         </i>
     }))
 }
+type TextItem = {
+    item: any,
+    text: string,
+    x: number,
+    y: number,
+    // 所有文字的总宽度
+    width: number,
+    // 所有文字的总高度
+    height: number,
+    // 单个宽度
+    textWidth: number,
+    // 单个高度
+    textHeight: number,
+}
 
 export default defineComponent<{
     // pdf文件路径
@@ -133,7 +147,7 @@ export default defineComponent<{
         // 大纲
         const outline = ref<any[]>([])
         const container = ref<HTMLDivElement>() as Ref<HTMLDivElement>
-
+        const textItems = ref<Array<TextItem>>([])
         const showOutline = ref(false)
         const outlineTabs = shallowRef([
             { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
@@ -434,12 +448,6 @@ export default defineComponent<{
         })
         const textSelectState = useTextSelection()
         const textSelectStateRect = computed(() => textSelectState.rects.value[0])
-        const textSelectStateRectEl = computed(() => {
-            return {
-                start: textSelectState.ranges.value[0].startContainer.parentElement,
-                end: textSelectState.ranges.value[0].endContainer.parentElement,
-            }
-        })
         const { copy } = useClipboard()
         const copyText = async () => {
             await copy(textSelectState.text.value as any)
@@ -461,7 +469,7 @@ export default defineComponent<{
                 clientY: rect.top + rect.height,
                 pressure: 1
             });
-            console.log(textSelectStateRectEl.value)
+            console.log(textItems.value)
             const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, 'draw')
             rectModel.drawRect(startEvent, endEvent)
             currentDrauu.value.brush.value = brush
@@ -595,32 +603,18 @@ export default defineComponent<{
                     width: viewport.value.wdith + 'px',
                     height: viewport.value.height + 'px',
                 }) as any)
-                type TextItem = {
-                    item: any,
-                    text: string,
-                    x: number,
-                    y: number,
-                    // 所有文字的总宽度
-                    width: number,
-                    // 所有文字的总高度
-                    height: number,
-                    // 单个宽度
-                    textWidth: number,
-                    // 单个高度
-                    textHeight: number,
-                }
-                const textItems = ref<Array<TextItem>>([])
+
                 onMounted(async () => {
                     const { viewport: _viewport, src: _src, page, getTextRect } = await render(document.createElement('canvas'), k)
                     viewport.value = _viewport
                     src.value = _src
-                    watch(currentPage, () => {
+                    watch(currentPage, async () => {
                         if (k === currentPage.value) {
                             currentDrauu.value = drauu
                             init()
+                            textItems.value = (await page.getTextContent()).items.map((item: any) => getTextRect(item))
                         }
                     }, { immediate: true })
-                    textItems.value = (await page.getTextContent()).items.map((item: any) => getTextRect(item))
                 })
                 const renderTextItem = (item: TextItem) => {
                     const total = item.text.length
@@ -632,7 +626,7 @@ export default defineComponent<{
                             width: `${item.textWidth}px`,
                             height: `${item.textHeight}px`,
                             fontSize: `${item.textHeight}px`,
-                        }}>{text}</div>
+                        }} data-text={text}>{text}</div>
                     })
                 }
                 const renderTextItems = () => <div class="abs-content z-2">
