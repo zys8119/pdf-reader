@@ -470,7 +470,7 @@ export default defineComponent<{
         }
         const getSelectionEls = () => {
             const selection = textSelectState.selection.value as any;
-            if (!selection.rangeCount) return;
+            if (!selection.rangeCount) return [];
 
             const range = selection.getRangeAt(0);
             let commonAncestor = range.commonAncestorContainer;
