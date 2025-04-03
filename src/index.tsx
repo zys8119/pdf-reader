@@ -495,7 +495,18 @@ export default defineComponent<{
         const getSelectTextItems = (els: Array<HTMLSpanElement>) => {
             return els.map(e => textItemsIdMap.value[e.getAttribute('data-id') as any]).filter(e => e)
         }
-        const highlightText = () => {
+        const getSelectTextRect = (callback: (path: SVGPathElement, data: {
+            d: string
+            els: Array<HTMLSpanElement>
+            elsItem: Array<TextItem & { id: any }>
+            elsRect: Array<{
+                sx: number,
+                sy: number,
+                ex: number,
+                ey: number
+            }>
+
+        }) => void) => {
             const rect = textSelectStateRect.value.toJSON()
             const brush = { ...currentDrauu.value.brush.value }
             currentDrauu.value.brush.value.mode = 'draw'
@@ -514,20 +525,41 @@ export default defineComponent<{
             });
             const selectEls = getSelectionEls()
             const selectElsItem = getSelectTextItems(selectEls)
-            const d = Object.values(groupBy(selectElsItem, e => e.y)).map(e => {
+            const elsRect: Array<{
+                sx: number,
+                sy: number,
+                ex: number,
+                ey: number
+            }> = Object.values(groupBy(selectElsItem, e => e.y)).map(e => {
                 return {
                     sx: Math.min(...e.map(e => e.x)),
                     sy: Math.min(...e.map(e => e.y)),
                     ex: Math.max(...e.map(e => e.x + e.width)),
                     ey: Math.max(...e.map(e => e.y + e.height))
                 }
-            }).map(e => `M ${e.sx} ${e.sy} L ${e.ex} ${e.sy} L ${e.ex} ${e.ey} L ${e.sx} ${e.ey} Z`).join(' ')
+            }) as Array<{
+                sx: number,
+                sy: number,
+                ex: number,
+                ey: number
+            }>
+            const d = elsRect.map(e => `M ${e.sx} ${e.sy} L ${e.ex} ${e.sy} L ${e.ex} ${e.ey} L ${e.sx} ${e.ey} Z`).join(' ')
             const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, path => {
-                path.setAttribute('fill', currentDrauu.value.brush.value.fill as any)
-                path.setAttribute('d', d)
+                callback(path, {
+                    els: selectEls,
+                    elsItem: selectElsItem as any,
+                    elsRect,
+                    d
+                })
             })
             rectModel.drawRect(startEvent, endEvent)
             currentDrauu.value.brush.value = brush
+        }
+        const highlightText = () => {
+            getSelectTextRect((path, { d }) => {
+                path.setAttribute('fill', currentDrauu.value.brush.value.fill as any)
+                path.setAttribute('d', d)
+            })
         }
         const id = 'selectionchange-pdf-copy-btn'
         document.getElementById(id)?.remove()
