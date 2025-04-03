@@ -46,7 +46,8 @@ class MyRectModel extends DrawModel {
         this.exec(point, 'eventEnd')
     }
     drawRectEnd(path: SVGPathElement) {
-        path.setAttribute('d', this.d)
+        path.setAttribute('d', this.d);
+        (this.drauu as any).MyRectModelDrawRectEnd = null
     }
     drawRect(point: PointerEvent, endEvent: PointerEvent) {
         this.exec(point, function (this: any, point: PointerEvent) {
@@ -148,6 +149,14 @@ export default defineComponent<{
         const outline = ref<any[]>([])
         const container = ref<HTMLDivElement>() as Ref<HTMLDivElement>
         const textItems = ref<Array<TextItem>>([])
+        const textItemsIdMap = ref<Record<any, {
+            x: number
+            y: number
+            text: string
+            width: number
+            height: number
+            id: number,
+        }>>({})
         const showOutline = ref(false)
         const outlineTabs = shallowRef([
             { title: '大纲', icon: 'outline', render: () => renderOutlineList(outline.value) },
@@ -341,6 +350,7 @@ export default defineComponent<{
             }).promise
             const src = canvas.toDataURL()
             canvas.remove()
+            let id = 1
             return {
                 page,
                 src,
@@ -363,6 +373,7 @@ export default defineComponent<{
                         textWidth: a * scale,
                         // 单个高度
                         textHeight: a * scale,
+                        id: id++,
                     }
                 }
             }
@@ -452,45 +463,27 @@ export default defineComponent<{
         const copyText = async () => {
             await copy(textSelectState.text.value as any)
         }
-        const getHighlightTextRect = () => {
-            const result: any[] = []
-            const rect: any = Object.fromEntries(Object.entries({
-                sx: textSelectStateRect.value.x,
-                sy: textSelectStateRect.value.y,
-                ex: textSelectStateRect.value.x + textSelectStateRect.value.width,
-                ey: textSelectStateRect.value.y + textSelectStateRect.value.height,
-            }).map(([k, v]) => {
-                const event = new PointerEvent('aaa', {
-                    clientX: v as any,
-                    clientY: v as any,
-                    pressure: 1
-                })
-                const ePoint = currentDrauu.value.drauuInstance.value?.model.getMousePosition(event)
-                return [k, ePoint?.x]
-            }))
-            console.log(rect)
-            textItems.value.forEach((item, kk) => {
-                const total = item.text.length
-                new Array(total).fill(0).forEach((e, k) => {
-                    const text = item.text.slice(k, k + 1)
-                    const x = item.x + item.textWidth * k
-                    const y = item.y
-                    const width = item.textWidth
-                    const height = item.textHeight
-                    if (x >= rect.sx && y >= rect.sy && x <= rect.ex && y <= rect.ey) {
-                        result.push({
-                            text,
-                            x,
-                            y,
-                            width,
-                            height,
-                            item
-                        })
-                    }
+        const getSelectionEls = () => {
+            const selection: any = textSelectState.selection.value;
+            if (!selection.rangeCount) return [];
 
-                })
-            })
-            return result
+            const range = selection.getRangeAt(0);
+            const selectedTextNodes = [];
+
+            const treeWalker = document.createTreeWalker(
+                range.commonAncestorContainer,
+                NodeFilter.SHOW_ELEMENT,
+                (node) => (range.intersectsNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT)
+            );
+
+            while (treeWalker.nextNode()) {
+                selectedTextNodes.push(treeWalker.currentNode);
+            }
+
+            return selectedTextNodes as Array<HTMLSpanElement>
+        }
+        const getSelectTextItems = (els: Array<HTMLSpanElement>) => {
+            return els.map(e => textItemsIdMap.value[e.getAttribute('data-id') as any]).filter(e => e)
         }
         const highlightText = () => {
             const rect = textSelectStateRect.value.toJSON()
@@ -509,9 +502,10 @@ export default defineComponent<{
                 clientY: rect.top + rect.height,
                 pressure: 1
             });
-
-            console.log(getHighlightTextRect())
-            const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, 'draw')
+            const selectEls = getSelectionEls()
+            const selectElsItem = getSelectTextItems(selectEls)
+            console.log(selectElsItem)
+            const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, 'M 0 0')
             rectModel.drawRect(startEvent, endEvent)
             currentDrauu.value.brush.value = brush
         }
@@ -654,25 +648,45 @@ export default defineComponent<{
                             currentDrauu.value = drauu
                             init()
                             textItems.value = (await page.getTextContent()).items.map((item: any) => getTextRect(item))
+                            textItemsIdMap.value = {}
                         }
                     }, { immediate: true })
                 })
-                const renderTextItem = (item: TextItem) => {
+                const renderTextItem = (item: TextItem, getId: () => number) => {
                     const total = item.text.length
                     return new Array(total).fill(0).map((e, k) => {
                         const text = item.text.slice(k, k + 1)
+                        const x = item.x + k * item.textWidth
+                        const y = item.y
+                        const width = item.textWidth
+                        const height = item.textHeight
+                        const id = getId()
+                        textItemsIdMap.value[id] = {
+                            text,
+                            x,
+                            y,
+                            width,
+                            height,
+                            id,
+                        }
                         return <div key={k} class="pdf-text-layer text-100px abs text-transparent of-hidden selection:text-transparent selection:bg-#0095ff selection:bg-op-30" style={{
-                            left: `${item.x + k * item.textWidth}px`,
-                            top: `${item.y}px`,
-                            width: `${item.textWidth}px`,
-                            height: `${item.textHeight}px`,
-                            fontSize: `${item.textHeight}px`,
-                        }} data-text={text}>{text}</div>
+                            left: `${x}px`,
+                            top: `${y}px`,
+                            width: `${width}px`,
+                            height: `${height}px`,
+                            fontSize: `${height}px`,
+                        }} data-id={id} data-text={text}>{text}</div>
                     })
                 }
-                const renderTextItems = () => <div class="abs-content z-2">
-                    {textItems.value.map((item) => renderTextItem(item))}
-                </div>
+                const renderTextItems = () => {
+                    let id = 0
+                    const getId = () => {
+                        return id++
+                    }
+                    return <div class="abs-content z-2">
+                        {textItems.value.map((item) => renderTextItem(item, getId))}
+                    </div>
+                }
                 const img = ref<HTMLImageElement>() as Ref<HTMLImageElement>
                 const imgStyle = ref('')
                 useMutationObserver(img, () => {
