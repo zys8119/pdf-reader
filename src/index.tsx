@@ -8,7 +8,7 @@ import { useDrauu } from '@vueuse/integrations/useDrauu'
 import { merge, omit, groupBy } from 'lodash'
 import { Drauu, DrawModel } from 'drauu'
 const onEnd = DrawModel.prototype.onEnd
-DrawModel.prototype.onEnd = function () {
+DrawModel.prototype.onEnd = (function (this: any) {
     if (typeof (this.drauu as any).MyRectModelDrawRectEnd === 'function') {
         const path = this.el
         this.el = null
@@ -19,11 +19,11 @@ DrawModel.prototype.onEnd = function () {
     } else {
         return onEnd.call(this)
     }
-}
+} as ((this: DrawModel) => boolean))
 class MyRectModel extends DrawModel {
     exec: any
     declare el: any
-    constructor(drauu: Drauu | any, public d: string) {
+    constructor(drauu: Drauu | any, public callback: string | ((path: SVGPathElement) => void)) {
 
         drauu.MyRectModelDrawRectEnd = (path: SVGPathElement) => {
             this.drawRectEnd(path)
@@ -46,7 +46,12 @@ class MyRectModel extends DrawModel {
         this.exec(point, 'eventEnd')
     }
     drawRectEnd(path: SVGPathElement) {
-        path.setAttribute('d', this.d);
+        if (typeof this.callback === 'string') {
+            path.setAttribute('d', this.callback);
+        } else {
+            this.callback?.(path)
+        }
+
         (this.drauu as any).MyRectModelDrawRectEnd = null
     }
     drawRect(point: PointerEvent, endEvent: PointerEvent) {
@@ -464,23 +469,28 @@ export default defineComponent<{
             await copy(textSelectState.text.value as any)
         }
         const getSelectionEls = () => {
-            const selection: any = textSelectState.selection.value;
-            if (!selection.rangeCount) return [];
+            const selection = textSelectState.selection.value as any;
+            if (!selection.rangeCount) return;
 
             const range = selection.getRangeAt(0);
-            const selectedTextNodes = [];
+            let commonAncestor = range.commonAncestorContainer;
 
+            if (commonAncestor.nodeType === Node.TEXT_NODE) {
+                commonAncestor = commonAncestor.parentElement;
+            }
+
+            const selectedElements = [];
             const treeWalker = document.createTreeWalker(
-                range.commonAncestorContainer,
-                NodeFilter.SHOW_ELEMENT,
+                commonAncestor, // 遍历整个父级
+                // NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, // 允许文本节点和元素
+                NodeFilter.SHOW_TEXT, // 允许文本节点和元素
                 (node) => (range.intersectsNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT)
             );
 
             while (treeWalker.nextNode()) {
-                selectedTextNodes.push(treeWalker.currentNode);
+                selectedElements.push(treeWalker.currentNode.parentElement);
             }
-
-            return selectedTextNodes as Array<HTMLSpanElement>
+            return selectedElements as Array<HTMLSpanElement>
         }
         const getSelectTextItems = (els: Array<HTMLSpanElement>) => {
             return els.map(e => textItemsIdMap.value[e.getAttribute('data-id') as any]).filter(e => e)
@@ -489,7 +499,7 @@ export default defineComponent<{
             const rect = textSelectStateRect.value.toJSON()
             const brush = { ...currentDrauu.value.brush.value }
             currentDrauu.value.brush.value.mode = 'draw'
-            currentDrauu.value.brush.value.fill = 'rgba(255,0,0,0.3)'
+            currentDrauu.value.brush.value.fill = 'rgba(252, 255, 47,0.3)'
             currentDrauu.value.brush.value.color = 'rgba(0,0,0,0)'
             currentDrauu.value.brush.value.size = 0
             const startEvent = new PointerEvent('pointerdown', {
@@ -504,8 +514,18 @@ export default defineComponent<{
             });
             const selectEls = getSelectionEls()
             const selectElsItem = getSelectTextItems(selectEls)
-            console.log(groupBy(selectElsItem, e => e.y))
-            const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, 'M 0 0')
+            const d = Object.values(groupBy(selectElsItem, e => e.y)).map(e => {
+                return {
+                    sx: Math.min(...e.map(e => e.x)),
+                    sy: Math.min(...e.map(e => e.y)),
+                    ex: Math.max(...e.map(e => e.x + e.width)),
+                    ey: Math.max(...e.map(e => e.y + e.height))
+                }
+            }).map(e => `M ${e.sx} ${e.sy} L ${e.ex} ${e.sy} L ${e.ex} ${e.ey} L ${e.sx} ${e.ey} Z`).join(' ')
+            const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, path => {
+                path.setAttribute('fill', currentDrauu.value.brush.value.fill as any)
+                path.setAttribute('d', d)
+            })
             rectModel.drawRect(startEvent, endEvent)
             currentDrauu.value.brush.value = brush
         }
