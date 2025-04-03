@@ -454,7 +454,20 @@ export default defineComponent<{
         }
         const getHighlightTextRect = () => {
             const result: any[] = []
-            const rect: any = Object.fromEntries(Object.entries(textSelectStateRect.value.toJSON()).map(([k, v]) => [k, v]))
+            const rect: any = Object.fromEntries(Object.entries({
+                sx: textSelectStateRect.value.x,
+                sy: textSelectStateRect.value.y,
+                ex: textSelectStateRect.value.x + textSelectStateRect.value.width,
+                ey: textSelectStateRect.value.y + textSelectStateRect.value.height,
+            }).map(([k, v]) => {
+                const event = new PointerEvent('aaa', {
+                    clientX: v as any,
+                    clientY: v as any,
+                    pressure: 1
+                })
+                const ePoint = currentDrauu.value.drauuInstance.value?.model.getMousePosition(event)
+                return [k, ePoint?.x]
+            }))
             console.log(rect)
             textItems.value.forEach((item, kk) => {
                 const total = item.text.length
@@ -464,7 +477,7 @@ export default defineComponent<{
                     const y = item.y
                     const width = item.textWidth
                     const height = item.textHeight
-                    if (x >= rect.left && y >= rect.top && x <= rect.left + rect.width && y <= rect.top + rect.height) {
+                    if (x >= rect.sx && y >= rect.sy && x <= rect.ex && y <= rect.ey) {
                         result.push({
                             text,
                             x,
