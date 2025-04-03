@@ -452,6 +452,33 @@ export default defineComponent<{
         const copyText = async () => {
             await copy(textSelectState.text.value as any)
         }
+        const getHighlightTextRect = () => {
+            const result: any[] = []
+            const rect: any = Object.fromEntries(Object.entries(textSelectStateRect.value.toJSON()).map(([k, v]) => [k, v]))
+            console.log(rect)
+            textItems.value.forEach((item, kk) => {
+                const total = item.text.length
+                new Array(total).fill(0).forEach((e, k) => {
+                    const text = item.text.slice(k, k + 1)
+                    const x = item.x + item.textWidth * k
+                    const y = item.y
+                    const width = item.textWidth
+                    const height = item.textHeight
+                    if (x >= rect.left && y >= rect.top && x <= rect.left + rect.width && y <= rect.top + rect.height) {
+                        result.push({
+                            text,
+                            x,
+                            y,
+                            width,
+                            height,
+                            item
+                        })
+                    }
+
+                })
+            })
+            return result
+        }
         const highlightText = () => {
             const rect = textSelectStateRect.value.toJSON()
             const brush = { ...currentDrauu.value.brush.value }
@@ -469,7 +496,8 @@ export default defineComponent<{
                 clientY: rect.top + rect.height,
                 pressure: 1
             });
-            console.log(textItems.value)
+
+            console.log(getHighlightTextRect())
             const rectModel = new MyRectModel(currentDrauu.value.drauuInstance.value as any, 'draw')
             rectModel.drawRect(startEvent, endEvent)
             currentDrauu.value.brush.value = brush
